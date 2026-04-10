@@ -2,8 +2,11 @@ import express from "express";
 import cors from "cors";
 
 import { expenses } from "./data/expenses";
-import { getAllExpenses } from "./controllers/expensesController";
-import { getExpense } from "./controllers/expensesController";
+import {
+	getAllExpenses,
+	getExpense,
+	deleteExpense,
+} from "./controllers/expensesController";
 
 //express app instnace
 const app = express();
@@ -46,19 +49,7 @@ app.post("/expenses", (req, res) => {
 });
 
 // DELETE single expense by id
-app.delete("/expenses/:id", (req, res) => {
-	//get id from url params as string
-	const id = Number(req.params.id);
-	//filter out expense that matches id
-	// finds item index
-	const index = expenses.findIndex((exp) => exp.id === id);
-	// remove if found
-	if (index !== -1) {
-		expenses.splice(index, 1);
-	}
-	//confirmation response
-	res.json({ message: "Deleted successfully" });
-});
+app.delete("/expenses/:id", deleteExpense);
 
 //error handler
 // catch-all error handler - add this before app.listen

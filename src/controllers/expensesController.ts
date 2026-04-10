@@ -4,9 +4,10 @@ import { expenses } from "../data/expenses";
 // Get all expenses
 // // url /expenses : sends data back to client in json format
 export const getAllExpenses = (req: Request, res: Response) => {
-	res.json([]);
+	res.json(expenses);
 };
 
+//get expense from id
 export const getExpense = (req: Request, res: Response) => {
 	//id from url
 	const id = Number(req.params.id);
@@ -21,4 +22,22 @@ export const getExpense = (req: Request, res: Response) => {
 
 	// return expense
 	res.json(expense);
+};
+
+//delete single expense
+export const deleteExpense = (req: Request, res: Response) => {
+	//get id from url params as string
+	const id = Number(req.params.id);
+	//filter out expense that matches id
+	// finds item index
+	const index = expenses.findIndex((exp) => exp.id === id);
+	// remove if found
+	if (index === -1) {
+		return res.status(404).json({ message: "Not found" });
+	}
+
+	expenses.splice(index, 1);
+
+	//confirmation response
+	res.json({ message: "Deleted successfully" });
 };
