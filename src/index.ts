@@ -28,6 +28,23 @@ app.get("/expenses", (req, res) => {
 	res.json(expenses);
 });
 
+// GET single expense by id
+app.get("/expenses/:id", (req, res) => {
+	//id from url
+	const id = Number(req.params.id);
+
+	// find expense in array
+	const expense = expenses.find((exp) => exp.id === id);
+
+	// if not found return error
+	if (!expenses) {
+		return res.status(404).json({ message: "Not found" });
+	}
+
+	// return expense
+	res.json(expense);
+});
+
 // CREATE new expense (POST /expenses)
 // takes data from client (req.body)
 // adds id, stores in memory, and returns it
