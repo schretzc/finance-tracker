@@ -29,6 +29,20 @@ app.get("/expenses", (req, res) => {
 	res.json(expenses);
 });
 
+// CREATE new expense (POST /expenses)
+// takes data from client (req.body)
+// adds id, stores in memory, and returns it
+app.post("/expenses", (req, res) => {
+	const newExpense = {
+		id: Date.now(), // unique id for epense
+		...req.body, // spread all incoming fields (name, amount, etc)
+	};
+	//store new expense in memory array
+	expenses.push(newExpense);
+	//send back created object
+	res.json(newExpense);
+});
+
 //error handler
 // catch-all error handler - add this before app.listen
 app.use(
