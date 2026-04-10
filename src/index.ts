@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 });
 
 // get all expenses
-// url /expenses : sendds data back to client in json format
+// url /expenses : sends data back to client in json format
 app.get("/expenses", (req, res) => {
 	res.json(expenses);
 });
@@ -41,6 +41,17 @@ app.post("/expenses", (req, res) => {
 	expenses.push(newExpense);
 	//send back created object
 	res.json(newExpense);
+});
+
+// DELETE single expense by id
+app.delete("/expenses/:id", (req, res) => {
+	//get id from url params as string
+	const id = Number(req.params.id);
+	//filter out expense that matches id
+	//creates enw array w/o deleted item
+	expenses = expenses.filter((exp) => exp.id !== id);
+	//confirmation response
+	res.json({ message: "Deleted successfully" });
 });
 
 //error handler
