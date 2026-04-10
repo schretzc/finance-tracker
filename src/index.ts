@@ -6,6 +6,7 @@ import {
 	getAllExpenses,
 	getExpense,
 	deleteExpense,
+	postExpense,
 } from "./controllers/expensesController";
 
 //express app instnace
@@ -37,16 +38,7 @@ app.get("/expenses/:id", getExpense);
 // CREATE new expense (POST /expenses)
 // takes data from client (req.body)
 // adds id, stores in memory, and returns it
-app.post("/expenses", (req, res) => {
-	const newExpense = {
-		id: Date.now(), // unique id for epense
-		...req.body, // spread all incoming fields (name, amount, etc)
-	};
-	//store new expense in memory array
-	expenses.push(newExpense);
-	//send back created object
-	res.json(newExpense);
-});
+app.post("/expenses", postExpense);
 
 // DELETE single expense by id
 app.delete("/expenses/:id", deleteExpense);
