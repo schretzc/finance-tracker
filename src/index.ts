@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 
 import { expenses } from "./data/expenses";
+import { getAllExpenses } from "./controllers/expensesController";
+import { getExpense } from "./controllers/expensesController";
 
 //express app instnace
 const app = express();
@@ -24,26 +26,10 @@ app.get("/", (req, res) => {
 
 // get all expenses
 // url /expenses : sends data back to client in json format
-app.get("/expenses", (req, res) => {
-	res.json(expenses);
-});
+app.get("/expenses", getAllExpenses);
 
 // GET single expense by id
-app.get("/expenses/:id", (req, res) => {
-	//id from url
-	const id = Number(req.params.id);
-
-	// find expense in array
-	const expense = expenses.find((exp) => exp.id === id);
-
-	// if not found return error
-	if (!expenses) {
-		return res.status(404).json({ message: "Not found" });
-	}
-
-	// return expense
-	res.json(expense);
-});
+app.get("/expenses/:id", getExpense);
 
 // CREATE new expense (POST /expenses)
 // takes data from client (req.body)
