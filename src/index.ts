@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 
+import { expenses } from "./data/expenses";
+
 //express app instnace
 const app = express();
 
@@ -14,9 +16,6 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 //parse income json requests(req.body)
 app.use(express.json());
-
-// temporary storage for expenses
-let expenses: any[] = [];
 
 // basic test route to confirm server is running
 app.get("/", (req, res) => {
@@ -48,8 +47,12 @@ app.delete("/expenses/:id", (req, res) => {
 	//get id from url params as string
 	const id = Number(req.params.id);
 	//filter out expense that matches id
-	//creates enw array w/o deleted item
-	expenses = expenses.filter((exp) => exp.id !== id);
+	// finds item index
+	const index = expenses.findIndex((exp) => exp.id === id);
+	// remove if found
+	if (index !== -1) {
+		expenses.splice(index, 1);
+	}
 	//confirmation response
 	res.json({ message: "Deleted successfully" });
 });
