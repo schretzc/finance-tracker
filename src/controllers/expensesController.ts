@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { expenses } from "../data/expenses";
+import { getAllExpensesService } from "../services/expensesService";
 
 // Get all expenses
-// // url /expenses : sends data back to client in json format
 export const getAllExpenses = (req: Request, res: Response) => {
-	res.json(expenses);
+	const allExpenses = getAllExpensesService(); // call service to get data
+	res.json(allExpenses); // send RESponse to client
 };
 
 //get expense from id
