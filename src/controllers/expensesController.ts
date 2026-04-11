@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { expenses } from "../data/expenses";
-import { getAllExpensesService } from "../services/expensesService";
+import {
+	getAllExpensesService,
+	getExpenseService,
+} from "../services/expensesService";
 
 // Get all expenses
 export const getAllExpenses = (req: Request, res: Response) => {
@@ -13,8 +16,7 @@ export const getExpense = (req: Request, res: Response) => {
 	//id from url
 	const id = Number(req.params.id);
 
-	// find expense in array
-	const expense = expenses.find((exp) => exp.id === id);
+	const expense = getExpenseService(id);
 
 	// if not found return error
 	if (!expense) {
