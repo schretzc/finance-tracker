@@ -9,3 +9,15 @@ export const getAllExpensesService = () => {
 export const getExpenseService = (id: number) => {
 	return expenses.find((exp) => exp.id === id);
 };
+
+//delete expense
+export const deleteExpenseService = (id: number) => {
+	const index = expenses.findIndex((exp) => exp.id === id);
+
+	if (index === -1) {
+		return false;
+	}
+
+	expenses.splice(index, 1);
+	return true;
+};

@@ -3,6 +3,7 @@ import { expenses } from "../data/expenses";
 import {
 	getAllExpensesService,
 	getExpenseService,
+	deleteExpenseService,
 } from "../services/expensesService";
 
 // Get all expenses
@@ -33,13 +34,11 @@ export const deleteExpense = (req: Request, res: Response) => {
 	const id = Number(req.params.id);
 	//filter out expense that matches id
 	// finds item index
-	const index = expenses.findIndex((exp) => exp.id === id);
-	// remove if found
-	if (index === -1) {
+	const wasDeleted = deleteExpenseService(id);
+
+	if (!wasDeleted) {
 		return res.status(404).json({ message: "Not found" });
 	}
-
-	expenses.splice(index, 1);
 
 	//confirmation response
 	res.json({ message: "Deleted successfully" });
