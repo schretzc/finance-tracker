@@ -21,3 +21,16 @@ export const deleteExpenseService = (id: number) => {
 	expenses.splice(index, 1);
 	return true;
 };
+
+//post expense
+export const createExpenseService = (data: any) => {
+	const newExpense = {
+		id: Date.now(),
+		...data,
+	};
+
+	//store expense in new memory array
+	expenses.push(newExpense);
+	// send back created object
+	return newExpense;
+};

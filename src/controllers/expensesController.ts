@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { expenses } from "../data/expenses";
 import {
 	getAllExpensesService,
 	getExpenseService,
 	deleteExpenseService,
+	createExpenseService,
 } from "../services/expensesService";
 
 // Get all expenses
@@ -48,12 +48,7 @@ export const deleteExpense = (req: Request, res: Response) => {
 // takes data from client (req.body)
 // adds id, stores in memory, and returns it
 export const postExpense = (req: Request, res: Response) => {
-	const newExpense = {
-		id: Date.now(), // unique id for epense
-		...req.body, // spread all incoming fields (name, amount, etc)
-	};
-	//store new expense in memory array
-	expenses.push(newExpense);
+	const newExpense = createExpenseService(req.body);
 	//send back created object
 	res.status(201).json(newExpense);
 };
