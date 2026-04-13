@@ -54,11 +54,13 @@ export const postExpense = (req: Request, res: Response) => {
 	res.status(201).json(newExpense);
 };
 
+//UPDATE epxnse
 export const updateExpense = (req: Request, res: Response) => {
-	const id = Number(req.params.id);
+	const id = Number(req.params.id); //extract id from url and convert to number
 
-	const updatedExpense = updateExpenseSerivce(id, req.body);
+	const updatedExpense = updateExpenseSerivce(id, req.body); // call service w/ id and incoming req.body
 
+	// if service returns null => expense not found => send 404
 	if (!updateExpense) {
 		return res.status(404).json({ message: "Not found" });
 	}

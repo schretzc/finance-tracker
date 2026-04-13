@@ -35,15 +35,16 @@ export const createExpenseService = (data: any) => {
 	return newExpense;
 };
 
-// update expense
+// update expense in memory
 export const updateExpenseSerivce = (id: number, data: any) => {
-	const expense = expenses.find((exp) => exp.id === id);
+	const expense = expenses.find((exp) => exp.id === id); //find in array that matches id
 
+	// if no expense found => return null
 	if (!expense) {
 		return null;
 	}
 
-	// update fields
+	// update only fields sent in request
 	Object.assign(expense, data);
 
 	return expense;

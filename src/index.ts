@@ -1,14 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-import { expenses } from "./data/expenses";
-import {
-	getAllExpenses,
-	getExpense,
-	deleteExpense,
-	postExpense,
-	updateExpense,
-} from "./controllers/expensesController";
+import expensesRoutes from "./routes/expensesRoutes";
 
 //express app instnace
 const app = express();
@@ -29,23 +22,7 @@ app.get("/", (req, res) => {
 	res.send("Finance Tracker API is running");
 });
 
-// get all expenses
-// url /expenses : sends data back to client in json format
-app.get("/expenses", getAllExpenses);
-
-// GET single expense by id
-app.get("/expenses/:id", getExpense);
-
-// CREATE new expense (POST /expenses)
-// takes data from client (req.body)
-// adds id, stores in memory, and returns it
-app.post("/expenses", postExpense);
-
-// DELETE single expense by id
-app.delete("/expenses/:id", deleteExpense);
-
-// UPDATE
-app.patch("/expenses/:id", updateExpense);
+app.use("/expenses", expensesRoutes);
 
 //error handler
 // catch-all error handler - add this before app.listen
