@@ -7,6 +7,27 @@ import {
 	updateExpenseSerivce,
 } from "../services/expensesService";
 
+import { expenseSchema } from "../validation/expenseSchema";
+
+// CREATE new expense (POST /expenses)
+// takes data from client (req.body)
+// adds id, stores in memory, and returns it
+export const postExpense = (req: Request, res: Response) => {
+	const result = expenseSchema.safeParse(req.body);
+
+	if (!result.success) {
+		return res.status(400).json({
+			message: "invalid expense data",
+			errors: result.error.issues,
+		});
+	}
+
+	const newExpense = createExpenseService(result.data);
+
+	//send back created object
+	res.status(201).json(newExpense);
+};
+
 // Get all expenses
 export const getAllExpenses = (req: Request, res: Response) => {
 	const allExpenses = getAllExpensesService(); // call service to get data
@@ -43,15 +64,6 @@ export const deleteExpense = (req: Request, res: Response) => {
 
 	//confirmation response
 	res.json({ message: "Deleted successfully" });
-};
-
-// CREATE new expense (POST /expenses)
-// takes data from client (req.body)
-// adds id, stores in memory, and returns it
-export const postExpense = (req: Request, res: Response) => {
-	const newExpense = createExpenseService(req.body);
-	//send back created object
-	res.status(201).json(newExpense);
 };
 
 //UPDATE epxnse
