@@ -4,6 +4,7 @@ import {
 	getExpenseService,
 	deleteExpenseService,
 	createExpenseService,
+	updateExpenseSerivce,
 } from "../services/expensesService";
 
 // Get all expenses
@@ -51,4 +52,16 @@ export const postExpense = (req: Request, res: Response) => {
 	const newExpense = createExpenseService(req.body);
 	//send back created object
 	res.status(201).json(newExpense);
+};
+
+export const updateExpense = (req: Request, res: Response) => {
+	const id = Number(req.params.id);
+
+	const updatedExpense = updateExpenseSerivce(id, req.body);
+
+	if (!updateExpense) {
+		return res.status(404).json({ message: "Not found" });
+	}
+
+	res.json(updatedExpense);
 };

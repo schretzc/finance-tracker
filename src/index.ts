@@ -7,6 +7,7 @@ import {
 	getExpense,
 	deleteExpense,
 	postExpense,
+	updateExpense,
 } from "./controllers/expensesController";
 
 //express app instnace
@@ -42,6 +43,9 @@ app.post("/expenses", postExpense);
 
 // DELETE single expense by id
 app.delete("/expenses/:id", deleteExpense);
+
+// UPDATE
+app.patch("/expenses/:id", updateExpense);
 
 //error handler
 // catch-all error handler - add this before app.listen

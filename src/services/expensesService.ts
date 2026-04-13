@@ -34,3 +34,17 @@ export const createExpenseService = (data: any) => {
 	// send back created object
 	return newExpense;
 };
+
+// update expense
+export const updateExpenseSerivce = (id: number, data: any) => {
+	const expense = expenses.find((exp) => exp.id === id);
+
+	if (!expense) {
+		return null;
+	}
+
+	// update fields
+	Object.assign(expense, data);
+
+	return expense;
+};
