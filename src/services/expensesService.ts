@@ -1,4 +1,5 @@
 import { expenses } from "../data/expenses";
+import { Expense } from "../types/expense";
 
 //get all expenses from memory
 export const getAllExpensesService = () => {
@@ -23,9 +24,12 @@ export const deleteExpenseService = (id: number) => {
 };
 
 //post expense
-export const createExpenseService = (data: any) => {
-	const newExpense = {
+export const createExpenseService = (
+	data: Omit<Expense, "id" | "date">,
+): Expense => {
+	const newExpense: Expense = {
 		id: Date.now(),
+		date: new Date().toISOString(),
 		...data,
 	};
 
@@ -36,7 +40,7 @@ export const createExpenseService = (data: any) => {
 };
 
 // update expense in memory
-export const updateExpenseSerivce = (id: number, data: any) => {
+export const updateExpenseSerivce = (id: number, data: Partial<Expense>) => {
 	const expense = expenses.find((exp) => exp.id === id); //find in array that matches id
 
 	// if no expense found => return null
