@@ -4,7 +4,7 @@ import {
 	getExpenseService,
 	deleteExpenseService,
 	createExpenseService,
-	updateExpenseSerivce,
+	updateExpenseService,
 } from "../services/expensesService";
 
 import { expenseSchema } from "../validation/expenseSchema";
@@ -12,7 +12,7 @@ import { expenseSchema } from "../validation/expenseSchema";
 // CREATE new expense (POST /expenses)
 // takes data from client (req.body)
 // adds id, stores in memory, and returns it
-export const postExpense = (req: Request, res: Response) => {
+export const postExpense = async (req: Request, res: Response) => {
 	const result = expenseSchema.safeParse(req.body);
 
 	if (!result.success) {
@@ -22,60 +22,50 @@ export const postExpense = (req: Request, res: Response) => {
 		});
 	}
 
-	const newExpense = createExpenseService(result.data);
+	const newExpense = await createExpenseService(result.data);
 
-	//send back created object
-	res.status(201).json(newExpense);
+	return res.status(201).json(newExpense);
 };
 
 // Get all expenses
-export const getAllExpenses = (req: Request, res: Response) => {
-	const allExpenses = getAllExpensesService(); // call service to get data
-	res.json(allExpenses); // send RESponse to client
+export const getAllExpenses = async (req: Request, res: Response) => {
+	const allExpenses = await getAllExpensesService();
+	return res.json(allExpenses);
 };
 
 //get expense from id
-export const getExpense = (req: Request, res: Response) => {
-	//id from url
+export const getExpense = async (req: Request, res: Response) => {
 	const id = Number(req.params.id);
 
-	const expense = getExpenseService(id);
+	const expense = await getExpenseService(id);
 
-	// if not found return error
 	if (!expense) {
 		return res.status(404).json({ message: "Not found" });
 	}
 
-	// return expense
-	res.json(expense);
+	return res.json(expense);
 };
 
 //delete single expense
-export const deleteExpense = (req: Request, res: Response) => {
-	//get id from url params as string
+export const deleteExpense = async (req: Request, res: Response) => {
 	const id = Number(req.params.id);
-	//filter out expense that matches id
-	// finds item index
-	const wasDeleted = deleteExpenseService(id);
 
-	if (!wasDeleted) {
+	try {
+		await deleteExpenseService(id);
+		return res.json({ message: "Deleted successfully" });
+	} catch {
 		return res.status(404).json({ message: "Not found" });
 	}
-
-	//confirmation response
-	res.json({ message: "Deleted successfully" });
 };
 
 //UPDATE epxnse
-export const updateExpense = (req: Request, res: Response) => {
-	const id = Number(req.params.id); //extract id from url and convert to number
+export const updateExpense = async (req: Request, res: Response) => {
+	const id = Number(req.params.id);
 
-	const updatedExpense = updateExpenseSerivce(id, req.body); // call service w/ id and incoming req.body
-
-	// if service returns null => expense not found => send 404
-	if (!updateExpense) {
+	try {
+		const updatedExpense = await updateExpenseService(id, req.body);
+		return res.json(updatedExpense);
+	} catch {
 		return res.status(404).json({ message: "Not found" });
 	}
-
-	res.json(updatedExpense);
 };
