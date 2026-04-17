@@ -16,6 +16,10 @@ This project demonstrates building a full backend service with database integrat
 - Prisma ORM for type-safe database access
 - Request validation using Zod
 - Clean architecture (controllers, services, routes)
+- View all expenses (GET /expenses)
+- Add new expenses (POST /expenses)
+- React frontend with form inputs
+- Real-time UI updates
 
 ---
 
@@ -136,11 +140,21 @@ src/
 
 ## 📌 Future Improvements
 
-- Filtering and sorting by category, amount, and date
-- Pagination for large datasets
-- User authentication (JWT-based)
-- Frontend dashboard (React)
-- Production deployment (Render/Vercel/Railway)
+- Delete expenses
+- Edit expenses
+- Authentication (JWT)
+- Category filtering
+- Charts / analytics
+
+---
+
+## Recent Updates
+
+- Added React frontend with Vite + TypeScript
+- Implemented expense creation form (POST /expenses)
+- Connected frontend to backend API
+- Added controlled form inputs (name, amount, category)
+- UI now supports creating and viewing expenses in real time
 
 ---
 
