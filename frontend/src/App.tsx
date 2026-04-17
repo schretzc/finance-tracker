@@ -11,6 +11,31 @@ type Expense = {
 function App() {
 	const [expenses, setExpenses] = useState<Expense[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [name, setName] = useState("");
+	const [amount, setAmount] = useState("");
+	const [category, setCategory] = useState("");
+	const addExpense = async () => {
+		try {
+			const res = await fetch("http://localhost:3000/expenses", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					name,
+					amount: Number(amount),
+					category,
+				}),
+			});
+			const newExpense = await res.json();
+			setExpenses((prev) => [...prev, newExpense]);
+			setName("");
+			setAmount("");
+			setCategory("");
+		} catch (err) {
+			console.error(err);
+		}
+	};
 
 	useEffect(() => {
 		fetch("http://localhost:3000/expenses")
@@ -30,6 +55,28 @@ function App() {
 	return (
 		<div style={{ padding: "20px" }}>
 			<h1>Finance Tracker</h1>
+			<div>
+				<h2>Add Expense</h2>
+
+				<div>
+					<label>Name</label>
+					<input value={name} onChange={(e) => setName(e.target.value)} />
+				</div>
+
+				<div>
+					<label>Amount</label>
+					<input value={amount} onChange={(e) => setAmount(e.target.value)} />
+				</div>
+				<div>
+					<label>Category</label>
+					<input
+						value={category}
+						onChange={(e) => setCategory(e.target.value)}
+					/>
+				</div>
+
+				<button onClick={addExpense}>Add</button>
+			</div>
 
 			{expenses.map((exp) => (
 				<div key={exp.id} style={{ marginBottom: "10px" }}>
