@@ -1,6 +1,8 @@
-# 💰 Finance Tracker API
+# 💰 Finance Tracker
 
-A RESTful backend API for tracking personal expenses, built with **Node.js, Express, Prisma, and PostgreSQL**.
+A backend service for tracking personal expenses, built with Node.js, Express, Prisma, and PostgreSQL.
+
+It uses a layered architecture (controllers, services, routes) with validation to ensure scalability and maintainability.
 
 This project demonstrates building a full backend service with database integration, validation, and clean architecture using controllers and services.
 
@@ -8,22 +10,40 @@ This project demonstrates building a full backend service with database integrat
 
 ## 🚀 Features
 
-- Create, read, update, and delete expenses (CRUD)
-- PostgreSQL database (hosted on Railway)
-- Prisma ORM for database access
-- Input validation using Zod
-- Structured backend (controllers, services, routes)
+- Full CRUD operations for expenses
+- Category-based expense tracking
+- PostgreSQL database hosted on Railway
+- Prisma ORM for type-safe database access
+- Request validation using Zod
+- Clean architecture (controllers, services, routes)
 
 ---
 
 ## 🛠 Tech Stack
 
-- Node.js
-- Express
-- TypeScript
-- Prisma ORM
-- PostgreSQL (Railway)
-- Zod
+**Backend:** Node.js, Express, TypeScript  
+**Database:** PostgreSQL (Railway)  
+**ORM:** Prisma
+**Validation:** Zod
+
+---
+
+## 📌 Highlights
+
+- Built with TypeScript for type safety
+- Structured for scalability and separation of concerns
+- Ready for frontend integration (REST API design)
+
+---
+
+## 🧱 Architecture
+
+The project follows a layered architecture:
+
+- Routes → define API endpoints
+- Controllers → handle HTTP requests/responses
+- Services → contain business logic and database operations
+- Prisma Client → handles type-safe database queries
 
 ---
 
@@ -86,53 +106,15 @@ http://localhost:3000
 
 ## 📡 API Endpoints
 
-### Create Expense
+### Expenses
 
-```
-POST /expenses
-```
-
-Body:
-
-```json
-{
-	"name": "coffee",
-	"amount": 5,
-	"category": "food"
-}
-```
-
----
-
-### Get All Expenses
-
-```
-GET /expenses
-```
-
----
-
-### Get Expense by ID
-
-```
-GET /expenses/:id
-```
-
----
-
-### Update Expense
-
-```
-PUT /expenses/:id
-```
-
----
-
-### Delete Expense
-
-```
-DELETE /expenses/:id
-```
+| Method | Endpoint      | Description           |
+| ------ | ------------- | --------------------- |
+| POST   | /expenses     | Create a new expense  |
+| GET    | /expenses     | Retrieve all expenses |
+| GET    | /expenses/:id | Get expense by ID     |
+| PUT    | /expenses/:id | Update expense        |
+| DELETE | /expenses/:id | Delete expense        |
 
 ---
 
@@ -154,11 +136,11 @@ src/
 
 ## 📌 Future Improvements
 
-- Filtering and sorting (e.g. by category, amount)
-- Pagination
-- Authentication (JWT)
-- Frontend (React)
-- Deployment
+- Filtering and sorting by category, amount, and date
+- Pagination for large datasets
+- User authentication (JWT-based)
+- Frontend dashboard (React)
+- Production deployment (Render/Vercel/Railway)
 
 ---
 
