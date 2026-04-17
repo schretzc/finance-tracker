@@ -31,15 +31,17 @@ function App() {
 		<div style={{ padding: "20px" }}>
 			<h1>Finance Tracker</h1>
 
-			{expenses.length === 0 ? (
-				<p>No expenses yet</p>
-			) : (
-				expenses.map((exp) => (
-					<div key={exp.id} style={{ marginBottom: "10px" }}>
+			{expenses.map((exp) => (
+				<div key={exp.id} style={{ marginBottom: "10px" }}>
+					<div>ID: {exp.id}</div>
+
+					<div>
 						<strong>{exp.name}</strong> — ${exp.amount} ({exp.category})
 					</div>
-				))
-			)}
+
+					<div>Date: {new Date(exp.date).toLocaleString()}</div>
+				</div>
+			))}
 		</div>
 	);
 }
