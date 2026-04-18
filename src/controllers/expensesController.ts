@@ -49,12 +49,12 @@ export const getExpense = async (req: Request, res: Response) => {
 //delete single expense
 export const deleteExpense = async (req: Request, res: Response) => {
 	const id = Number(req.params.id);
-
 	try {
 		await deleteExpenseService(id);
-		return res.json({ message: "Deleted successfully" });
-	} catch {
-		return res.status(404).json({ message: "Not found" });
+		return res.status(200).json({ message: "Deleted successfully" });
+	} catch (err) {
+		console.error(err);
+		return res.status(404).json({ message: "Expense not found" });
 	}
 };
 

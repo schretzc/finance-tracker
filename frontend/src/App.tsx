@@ -36,6 +36,17 @@ function App() {
 			console.error(err);
 		}
 	};
+	const deleteExpense = async (id: number) => {
+		try {
+			await fetch(`http://localhost:3000/expenses/${id}`, {
+				method: "DELETE",
+			});
+
+			setExpenses((prev) => prev.filter((exp) => exp.id !== id));
+		} catch (err) {
+			console.error(err);
+		}
+	};
 
 	useEffect(() => {
 		fetch("http://localhost:3000/expenses")
@@ -87,6 +98,7 @@ function App() {
 					</div>
 
 					<div>Date: {new Date(exp.date).toLocaleString()}</div>
+					<button onClick={() => deleteExpense(exp.id)}>Delete</button>
 				</div>
 			))}
 		</div>
