@@ -144,6 +144,16 @@ function App() {
 								onChange={(e) => setEditCategory(e.target.value)}
 							/>
 							<button onClick={() => updateExpense(exp.id)}>Save</button>
+							<button
+								onClick={() => {
+									setEditingId(null);
+									setEditName("");
+									setEditAmount("");
+									setEditCategory("");
+								}}
+							>
+								Cancel
+							</button>
 						</div>
 					) : (
 						<div>
