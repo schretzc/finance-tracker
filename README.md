@@ -155,6 +155,7 @@ src/
 - Connected frontend to backend API
 - Added controlled form inputs (name, amount, category)
 - UI now supports creating and viewing expenses in real time
+- UI supports delete functionality
 
 ---
 
