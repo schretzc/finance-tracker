@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
+import ExpenseList from "./components/ExpenseList";
 
 type Expense = {
 	id: number;
@@ -111,58 +112,30 @@ function App() {
 			/>
 			{editingId !== null && <div>Editing: {editingId}</div>}
 
-			{expenses.map((exp) => (
-				<div key={exp.id} style={{ marginBottom: "10px" }}>
-					<div>ID: {exp.id}</div>
-
-					{editingId === exp.id ? (
-						<div>
-							<input
-								value={editName}
-								onChange={(e) => setEditName(e.target.value)}
-							/>
-
-							<input
-								value={editAmount}
-								onChange={(e) => setEditAmount(e.target.value)}
-							/>
-
-							<input
-								value={editCategory}
-								onChange={(e) => setEditCategory(e.target.value)}
-							/>
-							<button onClick={() => updateExpense(exp.id)}>Save</button>
-							<button
-								onClick={() => {
-									setEditingId(null);
-									setEditName("");
-									setEditAmount("");
-									setEditCategory("");
-								}}
-							>
-								Cancel
-							</button>
-						</div>
-					) : (
-						<div>
-							<strong>{exp.name}</strong> - ${exp.amount} ({exp.category})
-						</div>
-					)}
-
-					<div>Date: {new Date(exp.date).toLocaleString()}</div>
-					<button onClick={() => deleteExpense(exp.id)}>Delete</button>
-					<button
-						onClick={() => {
-							setEditingId(exp.id);
-							setEditName(exp.name);
-							setEditAmount(String(exp.amount));
-							setEditCategory(exp.category);
-						}}
-					>
-						Edit
-					</button>
-				</div>
-			))}
+			<ExpenseList
+				expenses={expenses}
+				editingId={editingId}
+				editName={editName}
+				editAmount={editAmount}
+				editCategory={editCategory}
+				setEditName={setEditName}
+				setEditAmount={setEditAmount}
+				setEditCategory={setEditCategory}
+				onDelete={deleteExpense}
+				onEdit={(exp) => {
+					setEditingId(exp.id);
+					setEditName(exp.name);
+					setEditAmount(String(exp.amount));
+					setEditCategory(exp.category);
+				}}
+				onSave={updateExpense}
+				onCancel={() => {
+					setEditingId(null);
+					setEditName("");
+					setEditAmount("");
+					setEditCategory("");
+				}}
+			/>
 		</div>
 	);
 }
