@@ -8,64 +8,51 @@ import {
 	updateExpense as updateExpenseService,
 } from "./services/expenseService";
 import type { Expense } from "./types/expense";
+
 function App() {
 	const [expenses, setExpenses] = useState<Expense[]>([]);
 	const [loading, setLoading] = useState(true);
+
 	const [name, setName] = useState("");
 	const [amount, setAmount] = useState("");
 	const [category, setCategory] = useState("");
-	const [editName, setEditName] = useState("");
-	const [editAmount, setEditAmount] = useState("");
-	const [editCategory, setEditCategory] = useState("");
-	const [editingId, setEditingId] = useState<number | null>(null);
 
+	// CREATE
 	const addExpense = async () => {
-		try {
-			const newExpense = await createExpense({
-				name,
-				amount: Number(amount),
-				category,
-			});
+		const newExpense = await createExpense({
+			name,
+			amount: Number(amount),
+			category,
+		});
 
-			setExpenses((prev) => [...prev, newExpense]);
-			setName("");
-			setAmount("");
-			setCategory("");
-		} catch (err) {
-			console.error(err);
-		}
+		setExpenses((prev) => [...prev, newExpense]);
+
+		setName("");
+		setAmount("");
+		setCategory("");
 	};
 
+	// DELETE
 	const deleteExpense = async (id: number) => {
-		try {
-			await deleteExpenseService(id);
-
-			setExpenses((prev) => prev.filter((exp) => exp.id !== id));
-		} catch (err) {
-			console.error(err);
-		}
+		await deleteExpenseService(id);
+		setExpenses((prev) => prev.filter((exp) => exp.id !== id));
 	};
 
-	const updateExpense = async (id: number) => {
-		try {
-			const updated = await updateExpenseService(id, {
-				name: editName,
-				amount: Number(editAmount),
-				category: editCategory,
-			});
+	// UPDATE (used by ExpenseItem)
+	const updateExpense = async (
+		id: number,
+		data: {
+			name: string;
+			amount: number;
+			category: string;
+		},
+	) => {
+		const updated = await updateExpenseService(id, data);
 
-			setExpenses((prev) => prev.map((exp) => (exp.id === id ? updated : exp)));
-
-			setEditingId(null);
-
-			setEditName("");
-			setEditAmount("");
-			setEditCategory("");
-		} catch (err) {
-			console.error(err);
-		}
+		setExpenses((prev) => prev.map((exp) => (exp.id === id ? updated : exp)));
 	};
 
+	// READ
 	useEffect(() => {
 		getExpenses()
 			.then((data) => {
@@ -83,6 +70,7 @@ function App() {
 	return (
 		<div style={{ padding: "20px" }}>
 			<h1>Finance Tracker</h1>
+
 			<ExpenseForm
 				name={name}
 				setName={setName}
@@ -95,27 +83,8 @@ function App() {
 
 			<ExpenseList
 				expenses={expenses}
-				editingId={editingId}
-				editName={editName}
-				editAmount={editAmount}
-				editCategory={editCategory}
-				setEditName={setEditName}
-				setEditAmount={setEditAmount}
-				setEditCategory={setEditCategory}
 				onDelete={deleteExpense}
-				onEdit={(exp) => {
-					setEditingId(exp.id);
-					setEditName(exp.name);
-					setEditAmount(String(exp.amount));
-					setEditCategory(exp.category);
-				}}
-				onSave={updateExpense}
-				onCancel={() => {
-					setEditingId(null);
-					setEditName("");
-					setEditAmount("");
-					setEditCategory("");
-				}}
+				onUpdate={updateExpense}
 			/>
 		</div>
 	);

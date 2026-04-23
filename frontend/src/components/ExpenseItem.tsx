@@ -1,52 +1,64 @@
+import { useState } from "react";
 import type { Expense } from "../types/expense";
 
 type Props = {
 	expense: Expense;
-	editingId: number | null;
-	editName: string;
-	editAmount: string;
-	editCategory: string;
-	setEditName: (v: string) => void;
-	setEditAmount: (v: string) => void;
-	setEditCategory: (v: string) => void;
 	onDelete: (id: number) => void;
-	onEdit: (expense: Expense) => void;
-	onSave: (id: number) => void;
-	onCancel: () => void;
+	onUpdate: (
+		id: number,
+		data: {
+			name: string;
+			amount: number;
+			category: string;
+		},
+	) => void;
 };
 
-export default function ExpenseItem({
-	expense,
-	editingId,
-	editName,
-	editAmount,
-	editCategory,
-	setEditName,
-	setEditAmount,
-	setEditCategory,
-	onDelete,
-	onEdit,
-	onSave,
-	onCancel,
-}: Props) {
+export default function ExpenseItem({ expense, onDelete, onUpdate }: Props) {
+	const [isEditing, setIsEditing] = useState(false);
+
+	const [editName, setEditName] = useState(expense.name);
+	const [editAmount, setEditAmount] = useState(String(expense.amount));
+	const [editCategory, setEditCategory] = useState(expense.category);
+
+	const handleSave = () => {
+		onUpdate(expense.id, {
+			name: editName,
+			amount: Number(editAmount),
+			category: editCategory,
+		});
+
+		setIsEditing(false);
+	};
+
+	const handleCancel = () => {
+		setEditName(expense.name);
+		setEditAmount(String(expense.amount));
+		setEditCategory(expense.category); // FIXED
+		setIsEditing(false);
+	};
+
 	return (
 		<div style={{ marginBottom: "10px" }}>
-			{editingId === expense.id ? (
+			{isEditing ? (
 				<div>
 					<input
 						value={editName}
 						onChange={(e) => setEditName(e.target.value)}
 					/>
+
 					<input
 						value={editAmount}
 						onChange={(e) => setEditAmount(e.target.value)}
 					/>
+
 					<input
 						value={editCategory}
 						onChange={(e) => setEditCategory(e.target.value)}
 					/>
-					<button onClick={() => onSave(expense.id)}>Save</button>
-					<button onClick={onCancel}>Cancel</button>
+
+					<button onClick={handleSave}>Save</button>
+					<button onClick={handleCancel}>Cancel</button>
 				</div>
 			) : (
 				<div>
@@ -54,11 +66,13 @@ export default function ExpenseItem({
 					{expense.category})
 				</div>
 			)}
+
 			<div>{new Date(expense.date).toLocaleString()}</div>
-			{editingId !== expense.id && (
+
+			{!isEditing && (
 				<>
 					<button onClick={() => onDelete(expense.id)}>Delete</button>
-					<button onClick={() => onEdit(expense)}>Edit</button>
+					<button onClick={() => setIsEditing(true)}>Edit</button>
 				</>
 			)}
 		</div>
