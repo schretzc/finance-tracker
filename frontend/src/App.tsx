@@ -12,7 +12,6 @@ import type { Expense } from "./types/expense";
 function App() {
 	const [expenses, setExpenses] = useState<Expense[]>([]);
 	const [loading, setLoading] = useState(true);
-
 	const [name, setName] = useState("");
 	const [amount, setAmount] = useState("");
 	const [category, setCategory] = useState("");

@@ -19,24 +19,40 @@ export default function ExpenseForm({
 }: Props) {
 	return (
 		<div>
-			<h2>Add Expense</h2>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					addExpense();
+				}}
+			>
+				<h2>Add Expense</h2>
 
-			<div>
-				<label>Name</label>
-				<input value={name} onChange={(e) => setName(e.target.value)} />
-			</div>
+				<div>
+					<label>Name</label>
+					<input value={name} onChange={(e) => setName(e.target.value)} />
+				</div>
 
-			<div>
-				<label>Amount</label>
-				<input value={amount} onChange={(e) => setAmount(e.target.value)} />
-			</div>
+				<div>
+					<label>Amount</label>
+					<input
+						type="number"
+						value={amount}
+						onChange={(e) => setAmount(e.target.value)}
+					/>
+				</div>
 
-			<div>
-				<label>Category</label>
-				<input value={category} onChange={(e) => setCategory(e.target.value)} />
-			</div>
+				<div>
+					<label>Category</label>
+					<input
+						value={category}
+						onChange={(e) => setCategory(e.target.value)}
+					/>
+				</div>
 
-			<button onClick={addExpense}>Add</button>
+				<button type="submit" disabled={!name || !amount || !category}>
+					Add
+				</button>
+			</form>
 		</div>
 	);
 }
