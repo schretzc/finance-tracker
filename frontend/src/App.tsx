@@ -7,15 +7,7 @@ import {
 	deleteExpense as deleteExpenseService,
 	updateExpense as updateExpenseService,
 } from "./services/expenseService";
-
-type Expense = {
-	id: number;
-	name: string;
-	amount: number;
-	category: string;
-	date: string;
-};
-
+import type { Expense } from "./types/expense";
 function App() {
 	const [expenses, setExpenses] = useState<Expense[]>([]);
 	const [loading, setLoading] = useState(true);

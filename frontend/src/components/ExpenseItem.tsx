@@ -1,10 +1,4 @@
-type Expense = {
-	id: number;
-	name: string;
-	amount: number;
-	category: string;
-	date: string;
-};
+import type { Expense } from "../types/expense";
 
 type Props = {
 	expense: Expense;
