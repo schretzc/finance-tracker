@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
+import {
+	getExpenses,
+	createExpense,
+	deleteExpense as deleteExpenseService,
+	updateExpense as updateExpenseService,
+} from "./services/expenseService";
 
 type Expense = {
 	id: number;
@@ -20,21 +26,15 @@ function App() {
 	const [editAmount, setEditAmount] = useState("");
 	const [editCategory, setEditCategory] = useState("");
 	const [editingId, setEditingId] = useState<number | null>(null);
+
 	const addExpense = async () => {
 		try {
-			const res = await fetch("http://localhost:3000/expenses", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					name,
-					amount: Number(amount),
-					category,
-				}),
+			const newExpense = await createExpense({
+				name,
+				amount: Number(amount),
+				category,
 			});
 
-			const newExpense = await res.json();
 			setExpenses((prev) => [...prev, newExpense]);
 			setName("");
 			setAmount("");
@@ -46,9 +46,7 @@ function App() {
 
 	const deleteExpense = async (id: number) => {
 		try {
-			await fetch(`http://localhost:3000/expenses/${id}`, {
-				method: "DELETE",
-			});
+			await deleteExpenseService(id);
 
 			setExpenses((prev) => prev.filter((exp) => exp.id !== id));
 		} catch (err) {
@@ -58,18 +56,11 @@ function App() {
 
 	const updateExpense = async (id: number) => {
 		try {
-			const res = await fetch(`http://localhost:3000/expenses/${id}`, {
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					name: editName,
-					amount: Number(editAmount),
-					category: editCategory,
-				}),
+			const updated = await updateExpenseService(id, {
+				name: editName,
+				amount: Number(editAmount),
+				category: editCategory,
 			});
-			const updated = await res.json();
 
 			setExpenses((prev) => prev.map((exp) => (exp.id === id ? updated : exp)));
 
@@ -84,8 +75,7 @@ function App() {
 	};
 
 	useEffect(() => {
-		fetch("http://localhost:3000/expenses")
-			.then((res) => res.json())
+		getExpenses()
 			.then((data) => {
 				setExpenses(data);
 				setLoading(false);
@@ -110,7 +100,6 @@ function App() {
 				setCategory={setCategory}
 				addExpense={addExpense}
 			/>
-			{editingId !== null && <div>Editing: {editingId}</div>}
 
 			<ExpenseList
 				expenses={expenses}
