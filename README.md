@@ -1,68 +1,74 @@
 # 💰 Finance Tracker
 
-A backend service for tracking personal expenses, built with Node.js, Express, Prisma, and PostgreSQL.
+A full-stack expense tracking application built with a modern TypeScript stack, featuring a React frontend and a Node.js backend with Prisma and PostgreSQL.
 
-It uses a layered architecture (controllers, services, routes) with validation to ensure scalability and maintainability.
-
-This project demonstrates building a full backend service with database integration, validation, and clean architecture using controllers and services.
+This project demonstrates clean architecture, separation of concerns, and real-world frontend patterns such as component-based design, local state management, and service abstraction.
 
 ---
 
 ## 🚀 Features
 
+### Backend
+
 - Full CRUD operations for expenses
-- Category-based expense tracking
 - PostgreSQL database hosted on Railway
 - Prisma ORM for type-safe database access
 - Request validation using Zod
-- Clean architecture (controllers, services, routes)
-- View all expenses (GET /expenses)
-- Add new expenses (POST /expenses)
-- React frontend with form inputs
+- Layered architecture (controllers, services, routes)
+
+### Frontend
+
+- React + TypeScript (Vite)
+- Create, edit, and delete expenses
 - Real-time UI updates
+- Controlled form inputs with validation
+- Per-item editing with local component state
+- Service layer abstraction for API calls
 
 ---
 
 ## 🛠 Tech Stack
 
+**Frontend:** React, TypeScript, Vite  
 **Backend:** Node.js, Express, TypeScript  
 **Database:** PostgreSQL (Railway)  
-**ORM:** Prisma
+**ORM:** Prisma  
 **Validation:** Zod
 
 ---
 
 ## 📌 Highlights
 
-- Built with TypeScript for type safety
-- Structured for scalability and separation of concerns
-- Ready for frontend integration (REST API design)
+- Full-stack TypeScript application
+- Clean separation between UI, logic, and data layers
+- Uses a service layer on both frontend and backend
+- Demonstrates proper React state management patterns
+- Refactored from global edit state → per-component local state
 
 ---
 
 ## 🧱 Architecture
 
-The project follows a layered architecture:
+### Backend
 
 - Routes → define API endpoints
 - Controllers → handle HTTP requests/responses
-- Services → contain business logic and database operations
-- Prisma Client → handles type-safe database queries
+- Services → business logic + database operations
+- Prisma Client → database layer
+
+### Frontend
+
+- Components → UI (Form, List, Item)
+- Services → API calls (fetch abstraction)
+- App → state management + orchestration
 
 ---
 
 ## 📦 Installation
 
-Clone the repository:
-
 ```bash
 git clone https://github.com/schretzc/finance-tracker.git
 cd finance-tracker
-```
-
-Install dependencies:
-
-```bash
 npm install
 ```
 
@@ -70,7 +76,7 @@ npm install
 
 ## ⚙️ Environment Variables
 
-Create a `.env` file in the root:
+Create a `.env` file:
 
 ```env
 DATABASE_URL="your_postgresql_connection_string"
@@ -80,27 +86,22 @@ DATABASE_URL="your_postgresql_connection_string"
 
 ## 🗄 Database Setup
 
-Generate Prisma client:
-
 ```bash
 npx prisma generate
-```
-
-Push schema to database:
-
-```bash
 npx prisma db push
 ```
 
 ---
 
-## ▶️ Running the Server
+## ▶️ Running the App
+
+### Backend
 
 ```bash
 npm run dev
 ```
 
-Server runs at:
+Runs on:
 
 ```
 http://localhost:3000
@@ -108,54 +109,61 @@ http://localhost:3000
 
 ---
 
+### Frontend
+
+```bash
+cd client
+npm run dev
+```
+
+---
+
 ## 📡 API Endpoints
 
-### Expenses
-
-| Method | Endpoint      | Description           |
-| ------ | ------------- | --------------------- |
-| POST   | /expenses     | Create a new expense  |
-| GET    | /expenses     | Retrieve all expenses |
-| GET    | /expenses/:id | Get expense by ID     |
-| PUT    | /expenses/:id | Update expense        |
-| DELETE | /expenses/:id | Delete expense        |
+| Method | Endpoint      | Description      |
+| ------ | ------------- | ---------------- |
+| POST   | /expenses     | Create expense   |
+| GET    | /expenses     | Get all expenses |
+| GET    | /expenses/:id | Get by ID        |
+| PATCH  | /expenses/:id | Update expense   |
+| DELETE | /expenses/:id | Delete expense   |
 
 ---
 
 ## 🧠 Project Structure
 
 ```
-src/
+backend/src/
   controllers/
   services/
   routes/
-  prisma.ts
+
+client/src/
+  components/
+  services/
+  types/
 ```
 
-- Controllers handle HTTP requests and responses
-- Services contain business logic and database operations
-- Routes define API endpoints
+---
+
+## 📌 Recent Updates
+
+- Refactored frontend to use service layer for API calls
+- Moved expense type definitions to shared types file
+- Improved component structure (Form / List / Item)
+- Replaced global edit state with local component state
+- Added form validation and proper submit handling
+- Improved UX with disabled invalid submissions
 
 ---
 
-## 📌 Future Improvements
+## 🔮 Future Improvements
 
-- Delete expenses
-- Edit expenses
+- Search and filtering (by name/category)
+- UI styling (Tailwind or CSS modules)
+- Toast notifications (success/error feedback)
 - Authentication (JWT)
-- Category filtering
-- Charts / analytics
-
----
-
-## Recent Updates
-
-- Added React frontend with Vite + TypeScript
-- Implemented expense creation form (POST /expenses)
-- Connected frontend to backend API
-- Added controlled form inputs (name, amount, category)
-- UI now supports creating and viewing expenses in real time
-- UI supports delete functionality
+- Charts / analytics dashboard
 
 ---
 
