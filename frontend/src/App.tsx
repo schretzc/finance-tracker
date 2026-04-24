@@ -8,13 +8,16 @@ import {
 	updateExpense as updateExpenseService,
 } from "./services/expenseService";
 import type { Expense } from "./types/expense";
+import { categories, type Category } from "./constants/categories";
 
 function App() {
 	const [expenses, setExpenses] = useState<Expense[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [name, setName] = useState("");
 	const [amount, setAmount] = useState("");
-	const [category, setCategory] = useState("");
+	const [category, setCategory] = useState<Category | "">("");
+	const [search, setSearch] = useState("");
+	const [filterCategory, setFilterCategory] = useState("");
 
 	// CREATE
 	const addExpense = async () => {
@@ -64,12 +67,40 @@ function App() {
 			});
 	}, []);
 
+	const filteredExpenses = expenses.filter((exp) => {
+		const matchesSearch = exp.name.toLowerCase().includes(search.toLowerCase());
+		const matchesCategory = !filterCategory || exp.category === filterCategory;
+		return matchesSearch && matchesCategory;
+	});
+
 	if (loading) return <p>Loading...</p>;
 
 	return (
-		<div style={{ padding: "20px" }}>
+		<div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
 			<h1>Finance Tracker</h1>
 
+			{/* FILTER SECTION */}
+			<div style={{ marginBottom: "15px" }}>
+				<input
+					placeholder="Search expenses..."
+					value={search}
+					onChange={(e) => setSearch(e.target.value)}
+				/>
+
+				<select
+					value={filterCategory}
+					onChange={(e) => setFilterCategory(e.target.value)}
+				>
+					<option value="">All Categories</option>
+					{categories.map((cat) => (
+						<option key={cat} value={cat}>
+							{cat}
+						</option>
+					))}
+				</select>
+			</div>
+
+			{/* FORM SECTION */}
 			<ExpenseForm
 				name={name}
 				setName={setName}
@@ -80,8 +111,9 @@ function App() {
 				addExpense={addExpense}
 			/>
 
+			{/* LIST SECTION */}
 			<ExpenseList
-				expenses={expenses}
+				expenses={filteredExpenses}
 				onDelete={deleteExpense}
 				onUpdate={updateExpense}
 			/>

@@ -1,10 +1,12 @@
+import { categories, type Category } from "../constants/categories";
+
 type Props = {
 	name: string;
 	setName: (v: string) => void;
 	amount: string;
 	setAmount: (v: string) => void;
-	category: string;
-	setCategory: (v: string) => void;
+	category: Category | "";
+	setCategory: (v: Category | "") => void;
 	addExpense: () => void;
 };
 
@@ -43,10 +45,17 @@ export default function ExpenseForm({
 
 				<div>
 					<label>Category</label>
-					<input
+					<select
 						value={category}
-						onChange={(e) => setCategory(e.target.value)}
-					/>
+						onChange={(e) => setCategory(e.target.value as Category | "")}
+					>
+						<option value="">Select category</option>
+						{categories.map((cat) => (
+							<option key={cat} value={cat}>
+								{cat}
+							</option>
+						))}
+					</select>
 				</div>
 
 				<button type="submit" disabled={!name || !amount || !category}>

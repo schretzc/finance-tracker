@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Expense } from "../types/expense";
+import { categories, type Category } from "../constants/categories";
 
 type Props = {
 	expense: Expense;
@@ -9,7 +10,7 @@ type Props = {
 		data: {
 			name: string;
 			amount: number;
-			category: string;
+			category: Category;
 		},
 	) => void;
 };
@@ -52,10 +53,16 @@ export default function ExpenseItem({ expense, onDelete, onUpdate }: Props) {
 						onChange={(e) => setEditAmount(e.target.value)}
 					/>
 
-					<input
+					<select
 						value={editCategory}
-						onChange={(e) => setEditCategory(e.target.value)}
-					/>
+						onChange={(e) => setEditCategory(e.target.value as Category)}
+					>
+						{categories.map((cat) => (
+							<option key={cat} value={cat}>
+								{cat}
+							</option>
+						))}
+					</select>
 
 					<button onClick={handleSave}>Save</button>
 					<button onClick={handleCancel}>Cancel</button>
