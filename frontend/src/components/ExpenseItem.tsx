@@ -40,22 +40,35 @@ export default function ExpenseItem({ expense, onDelete, onUpdate }: Props) {
 	};
 
 	return (
-		<div style={{ marginBottom: "10px" }}>
+		<div
+			style={{
+				border: "1px solid #ddd",
+				borderRadius: "8px",
+				padding: "12px",
+				marginBottom: "12px",
+				backgroundColor: "#fff",
+				boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+			}}
+		>
 			{isEditing ? (
-				<div>
+				<div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
 					<input
 						value={editName}
 						onChange={(e) => setEditName(e.target.value)}
+						style={{ padding: "6px" }}
 					/>
 
 					<input
+						type="number"
 						value={editAmount}
 						onChange={(e) => setEditAmount(e.target.value)}
+						style={{ padding: "6px" }}
 					/>
 
 					<select
 						value={editCategory}
 						onChange={(e) => setEditCategory(e.target.value as Category)}
+						style={{ padding: "6px" }}
 					>
 						{categories.map((cat) => (
 							<option key={cat} value={cat}>
@@ -64,22 +77,45 @@ export default function ExpenseItem({ expense, onDelete, onUpdate }: Props) {
 						))}
 					</select>
 
-					<button onClick={handleSave}>Save</button>
-					<button onClick={handleCancel}>Cancel</button>
+					<div style={{ display: "flex", gap: "8px" }}>
+						<button onClick={handleSave}>Save</button>
+						<button onClick={handleCancel}>Cancel</button>
+					</div>
 				</div>
 			) : (
-				<div>
-					<strong>{expense.name}</strong> - ${expense.amount} (
-					{expense.category})
-				</div>
-			)}
-
-			<div>{new Date(expense.date).toLocaleString()}</div>
-
-			{!isEditing && (
 				<>
-					<button onClick={() => onDelete(expense.id)}>Delete</button>
-					<button onClick={() => setIsEditing(true)}>Edit</button>
+					{/* TOP ROW */}
+					<div
+						style={{
+							display: "flex",
+							justifyContent: "space-between",
+							alignItems: "center",
+							marginBottom: "6px",
+						}}
+					>
+						<strong>{expense.name}</strong>
+						<span>${expense.amount}</span>
+					</div>
+
+					{/* SECOND ROW */}
+					<div
+						style={{
+							display: "flex",
+							justifyContent: "space-between",
+							fontSize: "0.9rem",
+							color: "#666",
+							marginBottom: "8px",
+						}}
+					>
+						<span>{expense.category}</span>
+						<span>{new Date(expense.date).toLocaleDateString()}</span>
+					</div>
+
+					{/* ACTIONS */}
+					<div style={{ display: "flex", gap: "8px" }}>
+						<button onClick={() => onDelete(expense.id)}>Delete</button>
+						<button onClick={() => setIsEditing(true)}>Edit</button>
+					</div>
 				</>
 			)}
 		</div>

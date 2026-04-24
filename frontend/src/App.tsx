@@ -80,16 +80,28 @@ function App() {
 			<h1>Finance Tracker</h1>
 
 			{/* FILTER SECTION */}
-			<div style={{ marginBottom: "15px" }}>
+			<div style={{ marginBottom: "20px" }}>
 				<input
 					placeholder="Search expenses..."
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
+					style={{
+						width: "100%",
+						padding: "8px",
+						marginBottom: "10px",
+						borderRadius: "6px",
+						border: "1px solid #ccc",
+					}}
 				/>
-
 				<select
 					value={filterCategory}
 					onChange={(e) => setFilterCategory(e.target.value)}
+					style={{
+						width: "100%",
+						padding: "8px",
+						borderRadius: "6px",
+						border: "1px solid #ccc",
+					}}
 				>
 					<option value="">All Categories</option>
 					{categories.map((cat) => (
@@ -101,15 +113,17 @@ function App() {
 			</div>
 
 			{/* FORM SECTION */}
-			<ExpenseForm
-				name={name}
-				setName={setName}
-				amount={amount}
-				setAmount={setAmount}
-				category={category}
-				setCategory={setCategory}
-				addExpense={addExpense}
-			/>
+			<div style={{ marginBottom: "25px" }}>
+				<ExpenseForm
+					name={name}
+					setName={setName}
+					amount={amount}
+					setAmount={setAmount}
+					category={category}
+					setCategory={setCategory}
+					addExpense={addExpense}
+				/>
+			</div>
 
 			{/* LIST SECTION */}
 			<ExpenseList
