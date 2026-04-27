@@ -1,9 +1,12 @@
 import { z } from "zod";
+import { categories } from "../../shared/categories";
 
 export const expenseSchema = z.object({
 	name: z.string().min(1, "Name is required"),
-	amount: z.number().positive("Amount must be positive"),
-	category: z.string().min(1, "Category is required"),
-	// Optional date string - if not provided, Prisma will use current time
+
+	amount: z.coerce.number().positive("Amount must be positive"),
+
+	category: z.enum(categories),
+
 	date: z.string().optional(),
 });
