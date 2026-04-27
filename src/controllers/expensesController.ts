@@ -22,7 +22,13 @@ export const postExpense = async (req: Request, res: Response) => {
 		});
 	}
 
-	const newExpense = await createExpenseService(result.data);
+	const { name, amount, category, date } = result.data;
+	const newExpense = await createExpenseService({
+		name,
+		amount,
+		category,
+		date,
+	});
 
 	return res.status(201).json(newExpense);
 };

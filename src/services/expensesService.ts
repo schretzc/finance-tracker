@@ -1,11 +1,29 @@
 import { prisma } from "../prisma";
-import { Expense } from "../types/expense";
+
+type CreateExpenseInput = {
+	name: string;
+	amount: number;
+	category: string;
+	date?: string | undefined;
+};
+
+type UpdateExpenseInput = {
+	name?: string;
+	amount?: number;
+	category?: string;
+	date?: string | Date;
+};
 
 //post expense
-export const createExpenseService = async (
-	data: Omit<Expense, "id" | "date">,
-) => {
-	return await prisma.expense.create({ data });
+export const createExpenseService = async (data: CreateExpenseInput) => {
+	return await prisma.expense.create({
+		data: {
+			name: data.name,
+			amount: data.amount,
+			category: data.category,
+			date: data.date ? new Date(data.date) : new Date(),
+		},
+	});
 };
 
 //get all expenses from memory
@@ -34,10 +52,13 @@ export const deleteExpenseService = async (id: number) => {
 // UPDATE
 export const updateExpenseService = async (
 	id: number,
-	data: Partial<Expense>,
+	data: UpdateExpenseInput,
 ) => {
 	return await prisma.expense.update({
 		where: { id },
-		data,
+		data: {
+			...data,
+			...(data.date ? { date: new Date(data.date) } : {}),
+		},
 	});
 };

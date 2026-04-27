@@ -11,6 +11,7 @@ export const createExpense = async (data: {
 	name: string;
 	amount: number;
 	category: string;
+	date?: string;
 }) => {
 	const res = await fetch(BASE_URL, {
 		method: "POST",

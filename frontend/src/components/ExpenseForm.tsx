@@ -7,6 +7,8 @@ type Props = {
 	setAmount: (v: string) => void;
 	category: Category | "";
 	setCategory: (v: Category | "") => void;
+	date: string;
+	setDate: (v: string) => void;
 	addExpense: () => void;
 };
 
@@ -17,6 +19,8 @@ export default function ExpenseForm({
 	setAmount,
 	category,
 	setCategory,
+	date,
+	setDate,
 	addExpense,
 }: Props) {
 	return (
@@ -42,7 +46,14 @@ export default function ExpenseForm({
 						onChange={(e) => setAmount(e.target.value)}
 					/>
 				</div>
-
+				<div>
+					<label>Date</label>
+					<input
+						type="date"
+						value={date}
+						onChange={(e) => setDate(e.target.value)}
+					/>
+				</div>
 				<div>
 					<label>Category</label>
 					<select

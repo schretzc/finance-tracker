@@ -11,6 +11,7 @@ import type { Expense } from "./types/expense";
 import { categories, type Category } from "./constants/categories";
 
 function App() {
+	const [date, setDate] = useState("");
 	const [expenses, setExpenses] = useState<Expense[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [name, setName] = useState("");
@@ -25,6 +26,7 @@ function App() {
 			name,
 			amount: Number(amount),
 			category,
+			date,
 		});
 
 		setExpenses((prev) => [...prev, newExpense]);
@@ -32,6 +34,7 @@ function App() {
 		setName("");
 		setAmount("");
 		setCategory("");
+		setDate("");
 	};
 
 	// DELETE
@@ -121,6 +124,8 @@ function App() {
 					setAmount={setAmount}
 					category={category}
 					setCategory={setCategory}
+					date={date}
+					setDate={setDate}
 					addExpense={addExpense}
 				/>
 			</div>
