@@ -10,3 +10,5 @@ export const expenseSchema = z.object({
 
 	date: z.string().optional(),
 });
+
+export const updateExpenseSchema = expenseSchema.partial();

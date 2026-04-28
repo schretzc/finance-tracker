@@ -1,18 +1,13 @@
 import { prisma } from "../prisma";
+import { z } from "zod";
+import {
+	expenseSchema,
+	updateExpenseSchema,
+} from "../validation/expenseSchema";
 
-type CreateExpenseInput = {
-	name: string;
-	amount: number;
-	category: string;
-	date?: string | undefined;
-};
-
-type UpdateExpenseInput = {
-	name?: string;
-	amount?: number;
-	category?: string;
-	date?: string | Date;
-};
+// Types derived from Zod schemas - single source of truth
+type CreateExpenseInput = z.infer<typeof expenseSchema>;
+type UpdateExpenseInput = z.infer<typeof updateExpenseSchema>;
 
 //post expense
 export const createExpenseService = async (data: CreateExpenseInput) => {
@@ -54,10 +49,17 @@ export const updateExpenseService = async (
 	id: number,
 	data: UpdateExpenseInput,
 ) => {
+	// Remove undefined fields so Prisma doesn't get confused by exactOptionalPropertyTypes
+	const cleanData = Object.fromEntries(
+		Object.entries(data).filter(
+			([key, v]) => v !== undefined && key !== "date",
+		),
+	);
+
 	return await prisma.expense.update({
 		where: { id },
 		data: {
-			...data,
+			...cleanData,
 			...(data.date ? { date: new Date(data.date) } : {}),
 		},
 	});

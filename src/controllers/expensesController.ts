@@ -7,7 +7,7 @@ import {
 	updateExpenseService,
 } from "../services/expensesService";
 
-import { expenseSchema } from "../validation/expenseSchema";
+import { expenseSchema, updateExpenseSchema } from "../validation/expenseSchema";
 
 // CREATE new expense (POST /expenses)
 // takes data from client (req.body)
@@ -68,8 +68,17 @@ export const deleteExpense = async (req: Request, res: Response) => {
 export const updateExpense = async (req: Request, res: Response) => {
 	const id = Number(req.params.id);
 
+	const result = updateExpenseSchema.safeParse(req.body);
+
+	if (!result.success) {
+		return res.status(400).json({
+			message: "invalid update data",
+			errors: result.error.issues,
+		});
+	}
+
 	try {
-		const updatedExpense = await updateExpenseService(id, req.body);
+		const updatedExpense = await updateExpenseService(id, result.data);
 		return res.json(updatedExpense);
 	} catch {
 		return res.status(404).json({ message: "Not found" });
