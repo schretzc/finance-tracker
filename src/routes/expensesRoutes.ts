@@ -6,6 +6,7 @@ import {
 	postExpense,
 	deleteExpense,
 	updateExpense,
+	getExpensesByCategory,
 } from "../controllers/expensesController";
 
 //create router instance
@@ -26,6 +27,9 @@ router.delete("/:id", deleteExpense);
 
 //UPDATE
 router.patch("/:id", updateExpense);
+
+//getByCategory
+router.get("/summary/category", getExpensesByCategory);
 
 //export router so index.ts can use it
 export default router;

@@ -64,3 +64,17 @@ export const updateExpenseService = async (
 		},
 	});
 };
+
+//Get Expense by Category
+export const getExpensesByCategoryService = async () => {
+	const result = await prisma.expense.groupBy({
+		by: ["category"],
+		_sum: {
+			amount: true,
+		},
+	});
+	return result.map((item) => ({
+		category: item.category,
+		total: item._sum.amount ?? 0,
+	}));
+};

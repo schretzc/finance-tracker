@@ -7,7 +7,11 @@ import {
 	updateExpenseService,
 } from "../services/expensesService";
 
-import { expenseSchema, updateExpenseSchema } from "../validation/expenseSchema";
+import {
+	expenseSchema,
+	updateExpenseSchema,
+} from "../validation/expenseSchema";
+import { getExpensesByCategoryService } from "../services/expensesService";
 
 // CREATE new expense (POST /expenses)
 // takes data from client (req.body)
@@ -82,5 +86,16 @@ export const updateExpense = async (req: Request, res: Response) => {
 		return res.json(updatedExpense);
 	} catch {
 		return res.status(404).json({ message: "Not found" });
+	}
+};
+
+//get expenses by category
+export const getExpensesByCategory = async (req: Request, res: Response) => {
+	try {
+		const summary = await getExpensesByCategoryService();
+		return res.json(summary);
+	} catch (err) {
+		console.error(err);
+		return res.status(500).json({ message: "Failed to fetch summary" });
 	}
 };
