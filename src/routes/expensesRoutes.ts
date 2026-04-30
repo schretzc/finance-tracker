@@ -7,14 +7,19 @@ import {
 	deleteExpense,
 	updateExpense,
 	getExpensesByCategory,
+	getFilteredExpenses,
 } from "../controllers/expensesController";
 
 //create router instance
 const router = express.Router();
 
 //define routes
-//GET all
-router.get("/", getAllExpenses);
+
+//getByCategory
+router.get("/summary/category", getExpensesByCategory);
+
+//GETfilteredexpenses
+router.get("/", getFilteredExpenses);
 
 //GET by id
 router.get("/:id", getExpense);
@@ -27,9 +32,6 @@ router.delete("/:id", deleteExpense);
 
 //UPDATE
 router.patch("/:id", updateExpense);
-
-//getByCategory
-router.get("/summary/category", getExpensesByCategory);
 
 //export router so index.ts can use it
 export default router;

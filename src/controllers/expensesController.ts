@@ -5,13 +5,14 @@ import {
 	deleteExpenseService,
 	createExpenseService,
 	updateExpenseService,
+	getExpensesByCategoryService,
+	getFilteredExpensesService,
 } from "../services/expensesService";
 
 import {
 	expenseSchema,
 	updateExpenseSchema,
 } from "../validation/expenseSchema";
-import { getExpensesByCategoryService } from "../services/expensesService";
 
 // CREATE new expense (POST /expenses)
 // takes data from client (req.body)
@@ -97,5 +98,22 @@ export const getExpensesByCategory = async (req: Request, res: Response) => {
 	} catch (err) {
 		console.error(err);
 		return res.status(500).json({ message: "Failed to fetch summary" });
+	}
+};
+
+//get filtered expenses
+export const getFilteredExpenses = async (req: Request, res: Response) => {
+	const { startDate, endDate } = req.query;
+
+	try {
+		const expenses = await getFilteredExpensesService(
+			startDate as string | undefined,
+			endDate as string | undefined,
+		);
+
+		return res.json(expenses);
+	} catch (err) {
+		console.error(err);
+		return res.status(500).json({ message: "Failed to fetch expenses" });
 	}
 };

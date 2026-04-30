@@ -78,3 +78,22 @@ export const getExpensesByCategoryService = async () => {
 		total: item._sum.amount ?? 0,
 	}));
 };
+
+//get expense with filter
+export const getFilteredExpensesService = async (
+	startDate?: string,
+	endDate?: string,
+) => {
+	return await prisma.expense.findMany({
+		where: {
+			...(startDate || endDate
+				? {
+						date: {
+							...(startDate ? { gte: new Date(startDate) } : {}),
+							...(endDate ? { lte: new Date(endDate) } : {}),
+						},
+					}
+				: {}),
+		},
+	});
+};
