@@ -1,8 +1,15 @@
 const BASE_URL = "http://localhost:3000/expenses";
 
 //get all expenses
-export const getExpenses = async () => {
-	const res = await fetch(BASE_URL);
+export const getExpenses = async (startDate?: string, endDate?: string) => {
+	const params = new URLSearchParams();
+
+	if (startDate) params.append("startDate", startDate);
+	if (endDate) params.append("endDate", endDate);
+
+	const url = `${BASE_URL}?${params.toString()}`;
+
+	const res = await fetch(url);
 	return res.json();
 };
 

@@ -11,6 +11,8 @@ import type { Expense } from "./types/expense";
 import { categories, type Category } from "./constants/categories";
 
 function App() {
+	const [startDate, setStartDate] = useState("");
+	const [endDate, setEndDate] = useState("");
 	const [date, setDate] = useState("");
 	const [expenses, setExpenses] = useState<Expense[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -59,7 +61,7 @@ function App() {
 
 	// READ
 	useEffect(() => {
-		getExpenses()
+		getExpenses(startDate, endDate)
 			.then((data) => {
 				setExpenses(data);
 				setLoading(false);
@@ -68,11 +70,13 @@ function App() {
 				console.error(err);
 				setLoading(false);
 			});
-	}, []);
+	}, [startDate, endDate]);
 
 	const filteredExpenses = expenses.filter((exp) => {
 		const matchesSearch = exp.name.toLowerCase().includes(search.toLowerCase());
+
 		const matchesCategory = !filterCategory || exp.category === filterCategory;
+
 		return matchesSearch && matchesCategory;
 	});
 
@@ -83,6 +87,19 @@ function App() {
 			<h1>Finance Tracker</h1>
 
 			{/* FILTER SECTION */}
+			<input
+				type="date"
+				value={startDate}
+				onChange={(e) => setStartDate(e.target.value)}
+				style={{ marginBottom: "10px", width: "100%" }}
+			/>
+
+			<input
+				type="date"
+				value={endDate}
+				onChange={(e) => setEndDate(e.target.value)}
+				style={{ marginBottom: "10px", width: "100%" }}
+			/>
 			<div style={{ marginBottom: "20px" }}>
 				<input
 					placeholder="Search expenses..."
