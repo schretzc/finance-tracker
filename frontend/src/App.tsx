@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import {
@@ -6,6 +6,7 @@ import {
 	createExpense,
 	deleteExpense as deleteExpenseService,
 	updateExpense as updateExpenseService,
+	getCategorySummary,
 } from "./services/expenseService";
 import type { Expense } from "./types/expense";
 import { categories, type Category } from "./constants/categories";
@@ -21,56 +22,46 @@ function App() {
 	const [category, setCategory] = useState<Category | "">("");
 	const [search, setSearch] = useState("");
 	const [filterCategory, setFilterCategory] = useState("");
+	const [categorySummary, setCategorySummary] = useState<
+		{ category: string; total: number }[]
+	>([]);
 
 	// CREATE
 	const addExpense = async () => {
-		const newExpense = await createExpense({
-			name,
-			amount: Number(amount),
-			category,
-			date,
-		});
-
-		setExpenses((prev) => [...prev, newExpense]);
-
+		await createExpense({ name, amount: Number(amount), category, date });
+		await refreshData();
 		setName("");
 		setAmount("");
 		setCategory("");
 		setDate("");
 	};
 
-	// DELETE
 	const deleteExpense = async (id: number) => {
 		await deleteExpenseService(id);
-		setExpenses((prev) => prev.filter((exp) => exp.id !== id));
+		await refreshData();
 	};
 
-	// UPDATE (used by ExpenseItem)
 	const updateExpense = async (
 		id: number,
-		data: {
-			name: string;
-			amount: number;
-			category: string;
-		},
+		data: { name: string; amount: number; category: string },
 	) => {
-		const updated = await updateExpenseService(id, data);
-
-		setExpenses((prev) => prev.map((exp) => (exp.id === id ? updated : exp)));
+		await updateExpenseService(id, data);
+		await refreshData();
 	};
 
-	// READ
-	useEffect(() => {
-		getExpenses(startDate, endDate)
-			.then((data) => {
-				setExpenses(data);
-				setLoading(false);
-			})
-			.catch((err) => {
-				console.error(err);
-				setLoading(false);
-			});
-	}, [startDate, endDate]);
+	//refreshData
+	const refreshData = useCallback(async () => {
+		setLoading(true);
+
+		const [expenseData, summaryData] = await Promise.all([
+			getExpenses(startDate, endDate),
+			getCategorySummary(startDate, endDate),
+		]);
+
+		setExpenses(expenseData);
+		setCategorySummary(summaryData);
+		setLoading(false);
+	}, [startDate, endDate]); // <-- refreshData only changes when dates change
 
 	const filteredExpenses = expenses.filter((exp) => {
 		const matchesSearch = exp.name.toLowerCase().includes(search.toLowerCase());
@@ -80,11 +71,25 @@ function App() {
 		return matchesSearch && matchesCategory;
 	});
 
+	// READ
+	useEffect(() => {
+		refreshData().catch(console.error);
+	}, [refreshData]);
+
 	if (loading) return <p>Loading...</p>;
 
 	return (
 		<div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
 			<h1>Finance Tracker</h1>
+
+			<div style={{ marginBottom: "20px" }}>
+				<h3>Spending by Category</h3>
+				{categorySummary.map((item) => (
+					<div key={item.category}>
+						<strong>{item.category}:</strong> ${item.total.toFixed(2)}
+					</div>
+				))}
+			</div>
 
 			{/* FILTER SECTION */}
 			<input

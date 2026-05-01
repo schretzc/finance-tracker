@@ -56,3 +56,18 @@ export const updateExpense = async (
 	});
 	return res.json();
 };
+
+export const getCategorySummary = async (
+	startDate?: string,
+	endDate?: string,
+) => {
+	const params = new URLSearchParams();
+
+	if (startDate) params.append("startDate", startDate);
+	if (endDate) params.append("endDate", endDate);
+
+	const res = await fetch(
+		`http://localhost:3000/expenses/summary/category?${params.toString()}`,
+	);
+	return res.json();
+};
