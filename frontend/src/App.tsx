@@ -1,67 +1,27 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
-import {
-	getExpenses,
-	createExpense,
-	deleteExpense as deleteExpenseService,
-	updateExpense as updateExpenseService,
-	getCategorySummary,
-} from "./services/expenseService";
-import type { Expense } from "./types/expense";
 import { categories, type Category } from "./constants/categories";
+import { useExpenses } from "./hooks/useExpenses";
 
 function App() {
 	const [startDate, setStartDate] = useState("");
 	const [endDate, setEndDate] = useState("");
 	const [date, setDate] = useState("");
-	const [expenses, setExpenses] = useState<Expense[]>([]);
-	const [loading, setLoading] = useState(true);
 	const [name, setName] = useState("");
 	const [amount, setAmount] = useState("");
 	const [category, setCategory] = useState<Category | "">("");
 	const [search, setSearch] = useState("");
 	const [filterCategory, setFilterCategory] = useState("");
-	const [categorySummary, setCategorySummary] = useState<
-		{ category: string; total: number }[]
-	>([]);
 
-	//refreshData
-	const refreshData = useCallback(async () => {
-		setLoading(true);
-
-		const [expenseData, summaryData] = await Promise.all([
-			getExpenses(startDate, endDate),
-			getCategorySummary(startDate, endDate),
-		]);
-
-		setExpenses(expenseData);
-		setCategorySummary(summaryData);
-		setLoading(false);
-	}, [startDate, endDate]); // <-- refreshData only changes when dates change
-
-	// CREATE
-	const addExpense = async () => {
-		await createExpense({ name, amount: Number(amount), category, date });
-		await refreshData();
-		setName("");
-		setAmount("");
-		setCategory("");
-		setDate("");
-	};
-
-	const deleteExpense = async (id: number) => {
-		await deleteExpenseService(id);
-		await refreshData();
-	};
-
-	const updateExpense = async (
-		id: number,
-		data: { name: string; amount: number; category: string },
-	) => {
-		await updateExpenseService(id, data);
-		await refreshData();
-	};
+	const {
+		expenses,
+		categorySummary,
+		loading,
+		addExpense,
+		deleteExpense,
+		updateExpense,
+	} = useExpenses(startDate, endDate);
 
 	const filteredExpenses = expenses.filter((exp) => {
 		const matchesSearch = exp.name.toLowerCase().includes(search.toLowerCase());
@@ -70,11 +30,6 @@ function App() {
 
 		return matchesSearch && matchesCategory;
 	});
-
-	// READ
-	useEffect(() => {
-		refreshData().catch(console.error);
-	}, [refreshData]);
 
 	if (loading) return <p>Loading...</p>;
 

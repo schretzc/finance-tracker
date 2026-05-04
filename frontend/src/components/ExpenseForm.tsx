@@ -9,7 +9,12 @@ type Props = {
 	setCategory: (v: Category | "") => void;
 	date: string;
 	setDate: (v: string) => void;
-	addExpense: () => void;
+	addExpense: (data: {
+		name: string;
+		amount: number;
+		category: string;
+		date: string;
+	}) => Promise<void>;
 };
 
 export default function ExpenseForm({
@@ -28,7 +33,12 @@ export default function ExpenseForm({
 			<form
 				onSubmit={(e) => {
 					e.preventDefault();
-					addExpense();
+					addExpense({
+						name,
+						amount: Number(amount),
+						category,
+						date,
+					});
 				}}
 			>
 				<h2>Add Expense</h2>
