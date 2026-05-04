@@ -10,28 +10,26 @@ import {
 	getFilteredExpenses,
 } from "../controllers/expensesController";
 
-//create router instance
+import { authenticateToken } from "../middleware/authMiddleware";
+
 const router = express.Router();
 
-//define routes
+// GET by category (protected)
+router.get("/summary/category", authenticateToken, getExpensesByCategory);
 
-//getByCategory
-router.get("/summary/category", getExpensesByCategory);
+// GET filtered expenses (protected)
+router.get("/", authenticateToken, getFilteredExpenses);
 
-//GETfilteredexpenses
-router.get("/", getFilteredExpenses);
+// GET by id (protected)
+router.get("/:id", authenticateToken, getExpense);
 
-//GET by id
-router.get("/:id", getExpense);
+// CREATE (protected)
+router.post("/", authenticateToken, postExpense);
 
-//CREATE
-router.post("/", postExpense);
+// DELETE (protected)
+router.delete("/:id", authenticateToken, deleteExpense);
 
-//DELETE
-router.delete("/:id", deleteExpense);
+// UPDATE (protected)
+router.patch("/:id", authenticateToken, updateExpense);
 
-//UPDATE
-router.patch("/:id", updateExpense);
-
-//export router so index.ts can use it
 export default router;

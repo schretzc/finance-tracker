@@ -17,6 +17,7 @@ export const createExpenseService = async (data: CreateExpenseInput) => {
 			amount: data.amount,
 			category: data.category,
 			date: data.date ? new Date(data.date) : new Date(),
+			userId: 1,
 		},
 	});
 };
