@@ -7,7 +7,7 @@ node_modules/
 .env.*.local
 
 # prisma generated client
-/src/generated/prisma
+/src/generated/
 
 # build outputs
 dist/
