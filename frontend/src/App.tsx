@@ -26,6 +26,20 @@ function App() {
 		{ category: string; total: number }[]
 	>([]);
 
+	//refreshData
+	const refreshData = useCallback(async () => {
+		setLoading(true);
+
+		const [expenseData, summaryData] = await Promise.all([
+			getExpenses(startDate, endDate),
+			getCategorySummary(startDate, endDate),
+		]);
+
+		setExpenses(expenseData);
+		setCategorySummary(summaryData);
+		setLoading(false);
+	}, [startDate, endDate]); // <-- refreshData only changes when dates change
+
 	// CREATE
 	const addExpense = async () => {
 		await createExpense({ name, amount: Number(amount), category, date });
@@ -48,20 +62,6 @@ function App() {
 		await updateExpenseService(id, data);
 		await refreshData();
 	};
-
-	//refreshData
-	const refreshData = useCallback(async () => {
-		setLoading(true);
-
-		const [expenseData, summaryData] = await Promise.all([
-			getExpenses(startDate, endDate),
-			getCategorySummary(startDate, endDate),
-		]);
-
-		setExpenses(expenseData);
-		setCategorySummary(summaryData);
-		setLoading(false);
-	}, [startDate, endDate]); // <-- refreshData only changes when dates change
 
 	const filteredExpenses = expenses.filter((exp) => {
 		const matchesSearch = exp.name.toLowerCase().includes(search.toLowerCase());
