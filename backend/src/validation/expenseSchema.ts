@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { categories } from "../../shared/categories";
+import { categories } from "../../../shared/categories";
 
 export const expenseSchema = z.object({
 	name: z.string().min(1, "Name is required"),
