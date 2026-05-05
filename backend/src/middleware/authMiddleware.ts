@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
+if (!process.env.JWT_SECRET) {
+	throw new Error("Missing JWT_SECRET");
+}
+const JWT_SECRET = process.env.JWT_SECRET;
+
 interface AuthRequest extends Request {
 	user?: { userId: number };
 }
@@ -19,7 +24,7 @@ export const authenticateToken = (
 	}
 
 	try {
-		const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+		const decoded = jwt.verify(token, JWT_SECRET) as {
 			userId: number;
 		};
 
