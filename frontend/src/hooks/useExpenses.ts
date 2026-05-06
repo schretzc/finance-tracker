@@ -23,8 +23,9 @@ export function useExpenses(startDate: string, endDate: string) {
 			getCategorySummary(startDate, endDate),
 		]);
 
-		setExpenses(expenseData);
-		setCategorySummary(summaryData);
+		setExpenses(Array.isArray(expenseData) ? expenseData : []);
+
+		setCategorySummary(Array.isArray(summaryData) ? summaryData : []);
 		setLoading(false);
 	}, [startDate, endDate]);
 

@@ -1,5 +1,7 @@
 const BASE_URL = "http://localhost:3000/expenses";
 
+const getToken = () => localStorage.getItem("token");
+
 //get all expenses
 export const getExpenses = async (startDate?: string, endDate?: string) => {
 	const params = new URLSearchParams();
@@ -9,7 +11,13 @@ export const getExpenses = async (startDate?: string, endDate?: string) => {
 
 	const url = `${BASE_URL}?${params.toString()}`;
 
-	const res = await fetch(url);
+	const token = getToken();
+
+	const res = await fetch(url, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
 	return res.json();
 };
 
@@ -20,10 +28,13 @@ export const createExpense = async (data: {
 	category: string;
 	date?: string;
 }) => {
+	const token = getToken();
+
 	const res = await fetch(BASE_URL, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
+			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify(data),
 	});
@@ -33,8 +44,13 @@ export const createExpense = async (data: {
 
 //delete expense
 export const deleteExpense = async (id: number) => {
+	const token = getToken();
+
 	await fetch(`${BASE_URL}/${id}`, {
 		method: "DELETE",
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
 	});
 };
 
@@ -47,10 +63,13 @@ export const updateExpense = async (
 		category: string;
 	},
 ) => {
+	const token = getToken();
+
 	const res = await fetch(`${BASE_URL}/${id}`, {
 		method: "PATCH",
 		headers: {
 			"Content-Type": "application/json",
+			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify(data),
 	});
@@ -66,8 +85,15 @@ export const getCategorySummary = async (
 	if (startDate) params.append("startDate", startDate);
 	if (endDate) params.append("endDate", endDate);
 
+	const token = getToken();
+
 	const res = await fetch(
 		`http://localhost:3000/expenses/summary/category?${params.toString()}`,
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		},
 	);
 	return res.json();
 };
