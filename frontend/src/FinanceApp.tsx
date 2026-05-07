@@ -3,6 +3,7 @@ import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import { categories, type Category } from "./constants/categories";
 import { useExpenses } from "./hooks/useExpenses";
+import LogoutButton from "./components/LogoutButton";
 
 function App() {
 	const [startDate, setStartDate] = useState("");
@@ -35,6 +36,7 @@ function App() {
 
 	return (
 		<div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
+			<LogoutButton />
 			<h1>Finance Tracker</h1>
 
 			<div style={{ marginBottom: "20px" }}>
