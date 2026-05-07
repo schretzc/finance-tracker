@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { getToken } from "./services/authService";
+import { useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import { categories, type Category } from "./constants/categories";
@@ -15,15 +13,6 @@ function App() {
 	const [category, setCategory] = useState<Category | "">("");
 	const [search, setSearch] = useState("");
 	const [filterCategory, setFilterCategory] = useState("");
-
-	const navigate = useNavigate();
-	const location = useLocation();
-
-	useEffect(() => {
-		if (!getToken() && location.pathname !== "/login") {
-			navigate("/login");
-		}
-	}, [navigate, location]);
 
 	const {
 		expenses,
