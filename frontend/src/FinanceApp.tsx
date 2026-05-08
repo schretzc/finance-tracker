@@ -1,9 +1,10 @@
 import { useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
-import { categories, type Category } from "./constants/categories";
+import { type Category } from "./constants/categories";
 import { useExpenses } from "./hooks/useExpenses";
 import Navbar from "./components/Navbar";
+import FilterBar from "./components/FilterBar";
 
 function App() {
 	const [startDate, setStartDate] = useState("");
@@ -37,6 +38,17 @@ function App() {
 	return (
 		<div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
 			<Navbar />
+			{/* FILTER SECTION */}
+			<FilterBar
+				search={search}
+				setSearch={setSearch}
+				startDate={startDate}
+				setStartDate={setStartDate}
+				endDate={endDate}
+				setEndDate={setEndDate}
+				filterCategory={filterCategory}
+				setFilterCategory={setFilterCategory}
+			/>
 
 			<div style={{ marginBottom: "20px" }}>
 				<h3>Spending by Category</h3>
@@ -45,52 +57,6 @@ function App() {
 						<strong>{item.category}:</strong> ${item.total.toFixed(2)}
 					</div>
 				))}
-			</div>
-
-			{/* FILTER SECTION */}
-			<input
-				type="date"
-				value={startDate}
-				onChange={(e) => setStartDate(e.target.value)}
-				style={{ marginBottom: "10px", width: "100%" }}
-			/>
-
-			<input
-				type="date"
-				value={endDate}
-				onChange={(e) => setEndDate(e.target.value)}
-				style={{ marginBottom: "10px", width: "100%" }}
-			/>
-			<div style={{ marginBottom: "20px" }}>
-				<input
-					placeholder="Search expenses..."
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					style={{
-						width: "100%",
-						padding: "8px",
-						marginBottom: "10px",
-						borderRadius: "6px",
-						border: "1px solid #ccc",
-					}}
-				/>
-				<select
-					value={filterCategory}
-					onChange={(e) => setFilterCategory(e.target.value)}
-					style={{
-						width: "100%",
-						padding: "8px",
-						borderRadius: "6px",
-						border: "1px solid #ccc",
-					}}
-				>
-					<option value="">All Categories</option>
-					{categories.map((cat) => (
-						<option key={cat} value={cat}>
-							{cat}
-						</option>
-					))}
-				</select>
 			</div>
 
 			{/* FORM SECTION */}
@@ -109,11 +75,15 @@ function App() {
 			</div>
 
 			{/* LIST SECTION */}
-			<ExpenseList
-				expenses={filteredExpenses}
-				onDelete={deleteExpense}
-				onUpdate={updateExpense}
-			/>
+			{filteredExpenses.length === 0 ? (
+				<p>No expenses found.</p>
+			) : (
+				<ExpenseList
+					expenses={filteredExpenses}
+					onDelete={deleteExpense}
+					onUpdate={updateExpense}
+				/>
+			)}
 		</div>
 	);
 }
