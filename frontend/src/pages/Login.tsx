@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { login } from "../services/authService";
+import { Link } from "react-router-dom";
 export default function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -22,6 +23,9 @@ export default function Login() {
 	return (
 		<div style={{ maxWidth: 400, margin: "100px auto" }}>
 			<h2>Login</h2>
+			<p>
+				Don't have an account? <Link to="/register">Register</Link>
+			</p>
 
 			<form onSubmit={handleSubmit}>
 				<input

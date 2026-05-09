@@ -33,7 +33,13 @@ function App() {
 		return matchesSearch && matchesCategory;
 	});
 
-	if (loading) return <p>Loading...</p>;
+	if (loading) {
+		return (
+			<div style={{ textAlign: "center", padding: "40px" }}>
+				<p>Loading expenses...</p>
+			</div>
+		);
+	}
 
 	return (
 		<div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
