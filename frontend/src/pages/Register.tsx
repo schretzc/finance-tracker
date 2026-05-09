@@ -8,9 +8,31 @@ export default function Register() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	const handleRegister = async (e: React.FormEvent) => {
 		e.preventDefault();
+
+		setError("");
+
+		// VALIDATION FIRST (before loading)
+		if (!email || !password || !confirmPassword) {
+			setError("All fields are required");
+			return;
+		}
+
+		if (password !== confirmPassword) {
+			setError("Passwords do not match");
+			return;
+		}
+
+		if (!email.trim() || !password.trim() || !confirmPassword.trim()) {
+			setError("All fields are required");
+			return;
+		}
+
+		setLoading(true);
 
 		try {
 			const data = await register(email, password);
@@ -21,8 +43,10 @@ export default function Register() {
 			}
 
 			navigate("/login");
-		} catch (err) {
+		} catch {
 			setError("Something went wrong");
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -59,8 +83,21 @@ export default function Register() {
 						padding: "8px",
 					}}
 				/>
+				<input
+					type="password"
+					placeholder="Confirm Password"
+					value={confirmPassword}
+					onChange={(e) => setConfirmPassword(e.target.value)}
+					style={{
+						width: "100%",
+						marginBottom: "10px",
+						padding: "8px",
+					}}
+				/>
 
-				<button type="submit">Register</button>
+				<button type="submit" disabled={loading}>
+					{loading ? "Creating account..." : "Register"}
+				</button>
 			</form>
 
 			{error && <p style={{ color: "red" }}>{error}</p>}
