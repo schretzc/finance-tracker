@@ -94,7 +94,9 @@ export default function ExpenseItem({ expense, onDelete, onUpdate }: Props) {
 						}}
 					>
 						<strong>{expense.name}</strong>
-						<span>${expense.amount}</span>
+						<span style={{ fontWeight: "bold" }}>
+							${expense.amount.toFixed(2)}
+						</span>
 					</div>
 
 					{/* SECOND ROW */}
@@ -102,18 +104,43 @@ export default function ExpenseItem({ expense, onDelete, onUpdate }: Props) {
 						style={{
 							display: "flex",
 							justifyContent: "space-between",
-							fontSize: "0.9rem",
-							color: "#666",
+							fontSize: "0.85rem",
+							color: "#777",
 							marginBottom: "8px",
 						}}
 					>
-						<span>{expense.category}</span>
+						<span
+							style={{
+								background: "#f3f4f6",
+								padding: "2px 8px",
+								borderRadius: "999px",
+								fontSize: "0.8rem",
+							}}
+						>
+							{expense.category}
+						</span>
 						<span>{new Date(expense.date).toLocaleDateString()}</span>
 					</div>
 
 					{/* ACTIONS */}
 					<div style={{ display: "flex", gap: "8px" }}>
-						<button onClick={() => onDelete(expense.id)}>Delete</button>
+						<button
+							onClick={() => {
+								if (confirm("Delete this expense?")) {
+									onDelete(expense.id);
+								}
+							}}
+							style={{
+								color: "red",
+								border: "1px solid #fca5a5",
+								background: "#fff5f5",
+								borderRadius: "6px",
+								padding: "4px 8px",
+								cursor: "pointer",
+							}}
+						>
+							Delete
+						</button>
 						<button onClick={() => setIsEditing(true)}>Edit</button>
 					</div>
 				</>

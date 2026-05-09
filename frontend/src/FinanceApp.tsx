@@ -81,8 +81,11 @@ function App() {
 			</div>
 
 			{/* LIST SECTION */}
+			{/* LIST SECTION */}
 			{filteredExpenses.length === 0 ? (
-				<p>No expenses found.</p>
+				<p style={{ textAlign: "center", marginTop: "20px", color: "#666" }}>
+					No expenses found
+				</p>
 			) : (
 				<ExpenseList
 					expenses={filteredExpenses}

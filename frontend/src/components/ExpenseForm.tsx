@@ -31,14 +31,24 @@ export default function ExpenseForm({
 	return (
 		<div>
 			<form
-				onSubmit={(e) => {
+				onSubmit={async (e) => {
 					e.preventDefault();
-					addExpense({
-						name,
-						amount: Number(amount),
-						category,
-						date,
-					});
+
+					try {
+						await addExpense({
+							name,
+							amount: Number(amount),
+							category,
+							date,
+						});
+
+						setName("");
+						setAmount("");
+						setCategory("");
+						setDate("");
+					} catch (err) {
+						console.error(err);
+					}
 				}}
 			>
 				<h2>Add Expense</h2>
