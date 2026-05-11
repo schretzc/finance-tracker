@@ -1,5 +1,6 @@
 import { logout } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import { secondaryButtonStyle } from "../constants/styles";
 
 export default function LogoutButton() {
 	const navigate = useNavigate();
@@ -9,5 +10,9 @@ export default function LogoutButton() {
 		navigate("/login");
 	};
 
-	return <button onClick={handleLogout}>Logout</button>;
+	return (
+		<button onClick={handleLogout} style={secondaryButtonStyle}>
+			Logout
+		</button>
+	);
 }

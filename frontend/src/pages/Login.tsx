@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { login } from "../services/authService";
 import { Link } from "react-router-dom";
+import { primaryButtonStyle, inputStyle } from "../constants/styles";
+
 export default function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -32,7 +34,7 @@ export default function Login() {
 					placeholder="Email"
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
-					style={{ width: "100%", padding: 8, marginBottom: 10 }}
+					style={inputStyle}
 				/>
 
 				<input
@@ -40,10 +42,10 @@ export default function Login() {
 					placeholder="Password"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
-					style={{ width: "100%", padding: 8, marginBottom: 10 }}
+					style={inputStyle}
 				/>
 
-				<button type="submit" style={{ width: "100%" }}>
+				<button type="submit" style={primaryButtonStyle}>
 					Login
 				</button>
 			</form>

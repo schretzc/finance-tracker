@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { categories } from "../constants/categories";
+import { primaryButtonStyle, inputStyle } from "../constants/styles";
 
 interface Props {
 	search: string;
@@ -29,18 +30,7 @@ export default function FilterBar({
 
 	return (
 		<div style={{ marginBottom: "20px" }}>
-			<button
-				onClick={() => setOpen(!open)}
-				style={{
-					marginBottom: "10px",
-					padding: "8px 12px",
-					borderRadius: "6px",
-					border: "1px solid #ccc",
-					backgroundColor: "#cccccc80",
-					cursor: "pointer",
-					fontWeight: "bold",
-				}}
-			>
+			<button onClick={() => setOpen(!open)} style={primaryButtonStyle}>
 				Filters {open ? "▲" : "▼"}
 			</button>
 
@@ -51,7 +41,7 @@ export default function FilterBar({
 						placeholder="Search expenses..."
 						value={search}
 						onChange={(e) => setSearch(e.target.value)}
-						style={{ width: "100%", marginBottom: "10px" }}
+						style={inputStyle}
 					/>
 
 					{/* DATE RANGE */}
@@ -59,14 +49,14 @@ export default function FilterBar({
 						type="date"
 						value={startDate}
 						onChange={(e) => setStartDate(e.target.value)}
-						style={{ width: "100%", marginBottom: "10px" }}
+						style={inputStyle}
 					/>
 
 					<input
 						type="date"
 						value={endDate}
 						onChange={(e) => setEndDate(e.target.value)}
-						style={{ width: "100%", marginBottom: "10px" }}
+						style={inputStyle}
 					/>
 
 					{/* CATEGORY */}

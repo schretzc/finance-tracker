@@ -1,4 +1,5 @@
 import { categories, type Category } from "../constants/categories";
+import { inputStyle, primaryButtonStyle } from "../constants/styles";
 
 type Props = {
 	name: string;
@@ -55,7 +56,11 @@ export default function ExpenseForm({
 
 				<div>
 					<label>Name</label>
-					<input value={name} onChange={(e) => setName(e.target.value)} />
+					<input
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+						style={inputStyle}
+					/>
 				</div>
 
 				<div>
@@ -64,6 +69,7 @@ export default function ExpenseForm({
 						type="number"
 						value={amount}
 						onChange={(e) => setAmount(e.target.value)}
+						style={inputStyle}
 					/>
 				</div>
 				<div>
@@ -72,6 +78,7 @@ export default function ExpenseForm({
 						type="date"
 						value={date}
 						onChange={(e) => setDate(e.target.value)}
+						style={inputStyle}
 					/>
 				</div>
 				<div>
@@ -79,6 +86,7 @@ export default function ExpenseForm({
 					<select
 						value={category}
 						onChange={(e) => setCategory(e.target.value as Category | "")}
+						style={inputStyle}
 					>
 						<option value="">Select category</option>
 						{categories.map((cat) => (
@@ -89,7 +97,11 @@ export default function ExpenseForm({
 					</select>
 				</div>
 
-				<button type="submit" disabled={!name || !amount || !category}>
+				<button
+					type="submit"
+					disabled={!name || !amount || !category}
+					style={primaryButtonStyle}
+				>
 					Add
 				</button>
 			</form>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { register } from "../services/authService";
 import { Link, useNavigate } from "react-router-dom";
+import { primaryButtonStyle, inputStyle } from "../constants/styles";
 
 export default function Register() {
 	const navigate = useNavigate();
@@ -65,11 +66,7 @@ export default function Register() {
 					placeholder="Email"
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
-					style={{
-						width: "100%",
-						marginBottom: "10px",
-						padding: "8px",
-					}}
+					style={inputStyle}
 				/>
 
 				<input
@@ -77,25 +74,17 @@ export default function Register() {
 					placeholder="Password"
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
-					style={{
-						width: "100%",
-						marginBottom: "10px",
-						padding: "8px",
-					}}
+					style={inputStyle}
 				/>
 				<input
 					type="password"
 					placeholder="Confirm Password"
 					value={confirmPassword}
 					onChange={(e) => setConfirmPassword(e.target.value)}
-					style={{
-						width: "100%",
-						marginBottom: "10px",
-						padding: "8px",
-					}}
+					style={inputStyle}
 				/>
 
-				<button type="submit" disabled={loading}>
+				<button type="submit" disabled={loading} style={primaryButtonStyle}>
 					{loading ? "Creating account..." : "Register"}
 				</button>
 			</form>

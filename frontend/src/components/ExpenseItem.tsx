@@ -1,6 +1,12 @@
 import { useState } from "react";
 import type { Expense } from "../types/expense";
 import { categories, type Category } from "../constants/categories";
+import {
+	secondaryButtonStyle,
+	dangerButtonStyle,
+	primaryButtonStyle,
+	inputStyle,
+} from "../constants/styles";
 
 type Props = {
 	expense: Expense;
@@ -55,20 +61,20 @@ export default function ExpenseItem({ expense, onDelete, onUpdate }: Props) {
 					<input
 						value={editName}
 						onChange={(e) => setEditName(e.target.value)}
-						style={{ padding: "6px" }}
+						style={inputStyle}
 					/>
 
 					<input
 						type="number"
 						value={editAmount}
 						onChange={(e) => setEditAmount(e.target.value)}
-						style={{ padding: "6px" }}
+						style={inputStyle}
 					/>
 
 					<select
 						value={editCategory}
 						onChange={(e) => setEditCategory(e.target.value as Category)}
-						style={{ padding: "6px" }}
+						style={inputStyle}
 					>
 						{categories.map((cat) => (
 							<option key={cat} value={cat}>
@@ -78,8 +84,12 @@ export default function ExpenseItem({ expense, onDelete, onUpdate }: Props) {
 					</select>
 
 					<div style={{ display: "flex", gap: "8px" }}>
-						<button onClick={handleSave}>Save</button>
-						<button onClick={handleCancel}>Cancel</button>
+						<button onClick={handleSave} style={primaryButtonStyle}>
+							Save
+						</button>
+						<button onClick={handleCancel} style={secondaryButtonStyle}>
+							Cancel
+						</button>
 					</div>
 				</div>
 			) : (
@@ -130,18 +140,16 @@ export default function ExpenseItem({ expense, onDelete, onUpdate }: Props) {
 									onDelete(expense.id);
 								}
 							}}
-							style={{
-								color: "red",
-								border: "1px solid #fca5a5",
-								background: "#fff5f5",
-								borderRadius: "6px",
-								padding: "4px 8px",
-								cursor: "pointer",
-							}}
+							style={dangerButtonStyle}
 						>
 							Delete
 						</button>
-						<button onClick={() => setIsEditing(true)}>Edit</button>
+						<button
+							onClick={() => setIsEditing(true)}
+							style={secondaryButtonStyle}
+						>
+							Edit
+						</button>
 					</div>
 				</>
 			)}

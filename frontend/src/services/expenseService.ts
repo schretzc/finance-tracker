@@ -1,6 +1,5 @@
+import { getToken } from "./authService";
 const BASE_URL = "http://localhost:3000/expenses";
-
-const getToken = () => localStorage.getItem("token");
 
 //get all expenses
 export const getExpenses = async (startDate?: string, endDate?: string) => {
