@@ -18,15 +18,19 @@ export function useExpenses(startDate: string, endDate: string) {
 	const refreshData = useCallback(async () => {
 		setLoading(true);
 
-		const [expenseData, summaryData] = await Promise.all([
-			getExpenses(startDate, endDate),
-			getCategorySummary(startDate, endDate),
-		]);
+		try {
+			const [expenseData, summaryData] = await Promise.all([
+				getExpenses(startDate, endDate),
+				getCategorySummary(startDate, endDate),
+			]);
 
-		setExpenses(Array.isArray(expenseData) ? expenseData : []);
-
-		setCategorySummary(Array.isArray(summaryData) ? summaryData : []);
-		setLoading(false);
+			setExpenses(Array.isArray(expenseData) ? expenseData : []);
+			setCategorySummary(Array.isArray(summaryData) ? summaryData : []);
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setLoading(false);
+		}
 	}, [startDate, endDate]);
 
 	useEffect(() => {

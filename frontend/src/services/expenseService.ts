@@ -1,98 +1,84 @@
 import { getToken } from "./authService";
 const BASE_URL = "http://localhost:3000/expenses";
 
+const authFetch = async (url: string, options?: RequestInit) => {
+	const token = getToken();
+
+	const res = await fetch(url, {
+		...options,
+		headers: {
+			...options?.headers,
+			Authorization: `Bearer ${token}`,
+		},
+	});
+
+	if (!res.ok) {
+		if (res.status === 401) {
+			localStorage.removeItem("token");
+			window.location.href = "/login";
+			return;
+		}
+
+		throw new Error(`HTTP error ${res.status}`);
+	}
+
+	return res.json();
+};
+
 //get all expenses
-export const getExpenses = async (startDate?: string, endDate?: string) => {
+export const getExpenses = (startDate?: string, endDate?: string) => {
 	const params = new URLSearchParams();
 
 	if (startDate) params.append("startDate", startDate);
 	if (endDate) params.append("endDate", endDate);
 
-	const url = `${BASE_URL}?${params.toString()}`;
-
-	const token = getToken();
-
-	const res = await fetch(url, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
-	return res.json();
+	return authFetch(`${BASE_URL}?${params.toString()}`);
 };
 
 //create new expense
-export const createExpense = async (data: {
+export const createExpense = (data: {
 	name: string;
 	amount: number;
 	category: string;
 	date?: string;
 }) => {
-	const token = getToken();
-
-	const res = await fetch(BASE_URL, {
+	return authFetch(BASE_URL, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify(data),
 	});
-
-	return res.json();
 };
 
 //delete expense
-export const deleteExpense = async (id: number) => {
-	const token = getToken();
-
-	await fetch(`${BASE_URL}/${id}`, {
+export const deleteExpense = (id: number) => {
+	return authFetch(`${BASE_URL}/${id}`, {
 		method: "DELETE",
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
 	});
 };
 
 //update expense
-export const updateExpense = async (
+export const updateExpense = (
 	id: number,
-	data: {
-		name: string;
-		amount: number;
-		category: string;
-	},
+	data: { name: string; amount: number; category: string },
 ) => {
-	const token = getToken();
-
-	const res = await fetch(`${BASE_URL}/${id}`, {
+	return authFetch(`${BASE_URL}/${id}`, {
 		method: "PATCH",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify(data),
 	});
-	return res.json();
 };
 
-export const getCategorySummary = async (
-	startDate?: string,
-	endDate?: string,
-) => {
+export const getCategorySummary = (startDate?: string, endDate?: string) => {
 	const params = new URLSearchParams();
 
 	if (startDate) params.append("startDate", startDate);
 	if (endDate) params.append("endDate", endDate);
 
-	const token = getToken();
-
-	const res = await fetch(
+	return authFetch(
 		`http://localhost:3000/expenses/summary/category?${params.toString()}`,
-		{
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		},
 	);
-	return res.json();
 };

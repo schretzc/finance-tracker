@@ -16,14 +16,8 @@ function App() {
 	const [search, setSearch] = useState("");
 	const [filterCategory, setFilterCategory] = useState("");
 
-	const {
-		expenses,
-		categorySummary,
-		loading,
-		addExpense,
-		deleteExpense,
-		updateExpense,
-	} = useExpenses(startDate, endDate);
+	const { expenses, loading, addExpense, deleteExpense, updateExpense } =
+		useExpenses(startDate, endDate);
 
 	const filteredExpenses = expenses.filter((exp) => {
 		const matchesSearch = exp.name.toLowerCase().includes(search.toLowerCase());
