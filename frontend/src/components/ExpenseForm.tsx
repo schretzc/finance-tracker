@@ -1,5 +1,6 @@
 import { categories, type Category } from "../constants/categories";
 import { inputStyle, primaryButtonStyle } from "../constants/styles";
+import { useState } from "react";
 
 type Props = {
 	name: string;
@@ -29,82 +30,91 @@ export default function ExpenseForm({
 	setDate,
 	addExpense,
 }: Props) {
+	const [open, setOpen] = useState(false);
 	return (
 		<div>
-			<form
-				onSubmit={async (e) => {
-					e.preventDefault();
-
-					try {
-						await addExpense({
-							name,
-							amount: Number(amount),
-							category,
-							date,
-						});
-
-						setName("");
-						setAmount("");
-						setCategory("");
-						setDate("");
-					} catch (err) {
-						console.error(err);
-					}
-				}}
-			>
-				<h2>Add Expense</h2>
-
-				<div>
-					<label>Name</label>
-					<input
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-						style={inputStyle}
-					/>
-				</div>
-
-				<div>
-					<label>Amount</label>
-					<input
-						type="number"
-						value={amount}
-						onChange={(e) => setAmount(e.target.value)}
-						style={inputStyle}
-					/>
-				</div>
-				<div>
-					<label>Date</label>
-					<input
-						type="date"
-						value={date}
-						onChange={(e) => setDate(e.target.value)}
-						style={inputStyle}
-					/>
-				</div>
-				<div>
-					<label>Category</label>
-					<select
-						value={category}
-						onChange={(e) => setCategory(e.target.value as Category | "")}
-						style={inputStyle}
-					>
-						<option value="">Select category</option>
-						{categories.map((cat) => (
-							<option key={cat} value={cat}>
-								{cat}
-							</option>
-						))}
-					</select>
-				</div>
-
-				<button
-					type="submit"
-					disabled={!name || !amount || !category}
-					style={primaryButtonStyle}
-				>
-					Add
+			<div style={{ marginBottom: "12px" }}>
+				<button onClick={() => setOpen(!open)} style={primaryButtonStyle}>
+					Add Expense {open ? "▲" : "▼"}
 				</button>
-			</form>
+			</div>
+			{open && (
+				<form
+					onSubmit={async (e) => {
+						e.preventDefault();
+
+						try {
+							await addExpense({
+								name,
+								amount: Number(amount),
+								category,
+								date,
+							});
+
+							setName("");
+							setAmount("");
+							setCategory("");
+							setDate("");
+							setOpen(false);
+						} catch (err) {
+							console.error(err);
+						}
+					}}
+				>
+					<h2>Add Expense</h2>
+
+					<div>
+						<label>Name</label>
+						<input
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+							style={inputStyle}
+						/>
+					</div>
+
+					<div>
+						<label>Amount</label>
+						<input
+							type="number"
+							value={amount}
+							onChange={(e) => setAmount(e.target.value)}
+							style={inputStyle}
+						/>
+					</div>
+					<div>
+						<label>Date</label>
+						<input
+							type="date"
+							value={date}
+							onChange={(e) => setDate(e.target.value)}
+							style={inputStyle}
+						/>
+					</div>
+					<div>
+						<label>Category</label>
+						<select
+							value={category}
+							onChange={(e) => setCategory(e.target.value as Category | "")}
+							style={inputStyle}
+						>
+							<option value="">Select category</option>
+							{categories.map((cat) => (
+								<option key={cat} value={cat}>
+									{cat}
+								</option>
+							))}
+						</select>
+					</div>
+
+					<button
+						type="submit"
+						disabled={!name || !amount || !category}
+						style={primaryButtonStyle}
+					>
+						Add
+					</button>
+				</form>
+			)}
 		</div>
 	);
 }

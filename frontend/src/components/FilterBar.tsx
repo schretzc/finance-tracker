@@ -30,48 +30,55 @@ export default function FilterBar({
 
 	return (
 		<div style={{ marginBottom: "20px" }}>
-			<button onClick={() => setOpen(!open)} style={primaryButtonStyle}>
-				Filters {open ? "▲" : "▼"}
-			</button>
+			<div style={{ marginBottom: "12px" }}>
+				<button onClick={() => setOpen(!open)} style={primaryButtonStyle}>
+					Filters {open ? "▲" : "▼"}
+				</button>
+			</div>
 
 			{open && (
 				<div>
 					{/* SEARCH */}
-					<input
-						placeholder="Search expenses..."
-						value={search}
-						onChange={(e) => setSearch(e.target.value)}
-						style={inputStyle}
-					/>
-
+					<div style={{ marginBottom: "12px" }}>
+						<input
+							placeholder="Search expenses..."
+							value={search}
+							onChange={(e) => setSearch(e.target.value)}
+							style={inputStyle}
+						/>
+					</div>
 					{/* DATE RANGE */}
-					<input
-						type="date"
-						value={startDate}
-						onChange={(e) => setStartDate(e.target.value)}
-						style={inputStyle}
-					/>
-
-					<input
-						type="date"
-						value={endDate}
-						onChange={(e) => setEndDate(e.target.value)}
-						style={inputStyle}
-					/>
-
+					<div style={{ marginBottom: "12px" }}>
+						<input
+							type="date"
+							value={startDate}
+							onChange={(e) => setStartDate(e.target.value)}
+							style={inputStyle}
+						/>
+					</div>
+					<div style={{ marginBottom: "12px" }}>
+						<input
+							type="date"
+							value={endDate}
+							onChange={(e) => setEndDate(e.target.value)}
+							style={inputStyle}
+						/>
+					</div>
 					{/* CATEGORY */}
-					<select
-						value={filterCategory}
-						onChange={(e) => setFilterCategory(e.target.value)}
-						style={{ width: "100%" }}
-					>
-						<option value="">All Categories</option>
-						{categories.map((cat) => (
-							<option key={cat} value={cat}>
-								{cat}
-							</option>
-						))}
-					</select>
+					<div style={{ marginBottom: "12px" }}>
+						<select
+							value={filterCategory}
+							onChange={(e) => setFilterCategory(e.target.value)}
+							style={inputStyle}
+						>
+							<option value="">All Categories</option>
+							{categories.map((cat) => (
+								<option key={cat} value={cat}>
+									{cat}
+								</option>
+							))}
+						</select>
+					</div>
 				</div>
 			)}
 		</div>
