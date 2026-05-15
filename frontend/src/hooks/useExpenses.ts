@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
 	getExpenses,
 	createExpense,
@@ -8,38 +8,34 @@ import {
 } from "../services/expenseService";
 import type { Expense } from "../types/expense";
 
-export function useExpenses(startDate: string, endDate: string) {
+export function useExpenses(startDate?: string, endDate?: string) {
 	const [expenses, setExpenses] = useState<Expense[]>([]);
 	const [categorySummary, setCategorySummary] = useState<
 		{ category: string; total: number }[]
 	>([]);
 	const [loading, setLoading] = useState(true);
 
-	const refreshData = useCallback(async () => {
-		setLoading(true);
-
-		try {
-			const [expenseData, summaryData] = await Promise.all([
-				getExpenses(startDate, endDate),
-				getCategorySummary(startDate, endDate),
-			]);
-
-			setExpenses(Array.isArray(expenseData) ? expenseData : []);
-			setCategorySummary(Array.isArray(summaryData) ? summaryData : []);
-		} catch (err) {
-			console.error(err);
-		} finally {
-			setLoading(false);
-		}
-	}, [startDate, endDate]);
-
 	useEffect(() => {
 		const load = async () => {
-			await refreshData();
+			setLoading(true);
+
+			try {
+				const [expenseData, summaryData] = await Promise.all([
+					getExpenses(startDate, endDate),
+					getCategorySummary(startDate, endDate),
+				]);
+
+				setExpenses(Array.isArray(expenseData) ? expenseData : []);
+				setCategorySummary(Array.isArray(summaryData) ? summaryData : []);
+			} catch (err) {
+				console.error(err);
+			} finally {
+				setLoading(false);
+			}
 		};
 
-		load().catch(console.error);
-	}, [refreshData]);
+		load();
+	}, [startDate, endDate]);
 
 	const addExpense = async (data: {
 		name: string;
@@ -48,12 +44,10 @@ export function useExpenses(startDate: string, endDate: string) {
 		date: string;
 	}) => {
 		await createExpense(data);
-		await refreshData();
 	};
 
 	const deleteExpense = async (id: number) => {
 		await deleteExpenseService(id);
-		await refreshData();
 	};
 
 	const updateExpense = async (
@@ -61,7 +55,6 @@ export function useExpenses(startDate: string, endDate: string) {
 		data: { name: string; amount: number; category: string },
 	) => {
 		await updateExpenseService(id, data);
-		await refreshData();
 	};
 
 	return {

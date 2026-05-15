@@ -14,6 +14,8 @@ interface Props {
 
 	filterCategory: string;
 	setFilterCategory: (value: string) => void;
+
+	clearFilters: () => void;
 }
 
 export default function FilterBar({
@@ -25,13 +27,18 @@ export default function FilterBar({
 	setEndDate,
 	filterCategory,
 	setFilterCategory,
+	clearFilters,
 }: Props) {
 	const [open, setOpen] = useState(false);
 
 	return (
 		<div style={{ marginBottom: "20px" }}>
 			<div style={{ marginBottom: "12px" }}>
-				<button onClick={() => setOpen(!open)} style={primaryButtonStyle}>
+				<button
+					type="button"
+					onClick={() => setOpen(!open)}
+					style={primaryButtonStyle}
+				>
 					Filters {open ? "▲" : "▼"}
 				</button>
 			</div>
@@ -78,6 +85,15 @@ export default function FilterBar({
 								</option>
 							))}
 						</select>
+						<div style={{ marginTop: "12px" }}>
+							<button
+								type="button"
+								onClick={clearFilters}
+								style={primaryButtonStyle}
+							>
+								Clear Filters
+							</button>
+						</div>
 					</div>
 				</div>
 			)}

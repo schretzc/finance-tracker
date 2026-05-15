@@ -18,14 +18,20 @@ function App() {
 	const [filterCategory, setFilterCategory] = useState("");
 
 	const { expenses, loading, addExpense, deleteExpense, updateExpense } =
-		useExpenses(startDate, endDate);
+		useExpenses();
 
 	const filteredExpenses = expenses.filter((exp) => {
 		const matchesSearch = exp.name.toLowerCase().includes(search.toLowerCase());
 
 		const matchesCategory = !filterCategory || exp.category === filterCategory;
 
-		return matchesSearch && matchesCategory;
+		const matchesStartDate = !startDate || exp.date >= startDate;
+
+		const matchesEndDate = !endDate || exp.date <= endDate;
+
+		return (
+			matchesSearch && matchesCategory && matchesStartDate && matchesEndDate
+		);
 	});
 
 	if (loading) {
@@ -35,6 +41,13 @@ function App() {
 			</div>
 		);
 	}
+
+	const clearFilters = () => {
+		setSearch("");
+		setStartDate("");
+		setEndDate("");
+		setFilterCategory("");
+	};
 
 	const categoryData = filteredExpenses.reduce(
 		(acc, exp) => {
@@ -66,6 +79,7 @@ function App() {
 				setEndDate={setEndDate}
 				filterCategory={filterCategory}
 				setFilterCategory={setFilterCategory}
+				clearFilters={clearFilters}
 			/>
 
 			<div style={{ marginBottom: "20px" }}>
