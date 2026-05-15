@@ -41,6 +41,18 @@ function App() {
 		);
 	}
 
+	const categoryData = filteredExpenses.reduce(
+		(acc, exp) => {
+			const category = exp.category;
+			const amount = Number(exp.amount);
+
+			acc[category] = (acc[category] || 0) + amount;
+
+			return acc;
+		},
+		{} as Record<string, number>,
+	);
+
 	return (
 		<div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
 			<Navbar />
@@ -58,11 +70,24 @@ function App() {
 
 			<div style={{ marginBottom: "20px" }}>
 				<h3>Spending by Category</h3>
-				{categorySummary.map((item) => (
-					<div key={item.category}>
-						<strong>{item.category}:</strong> ${item.total.toFixed(2)}
-					</div>
-				))}
+
+				{Object.keys(categoryData).length === 0 ? (
+					<p style={{ color: "#777" }}>No data</p>
+				) : (
+					Object.entries(categoryData).map(([category, total]) => (
+						<div
+							key={category}
+							style={{
+								display: "flex",
+								justifyContent: "space-between",
+								padding: "4px 0",
+							}}
+						>
+							<span>{category}</span>
+							<strong>${total.toFixed(2)}</strong>
+						</div>
+					))
+				)}
 			</div>
 
 			{/* FORM SECTION */}
