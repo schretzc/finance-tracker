@@ -5,6 +5,7 @@ import { type Category } from "./constants/categories";
 import { useExpenses } from "./hooks/useExpenses";
 import Navbar from "./components/Navbar";
 import FilterBar from "./components/FilterBar";
+import CategoryChart from "./components/CategoryChart";
 
 function App() {
 	const [startDate, setStartDate] = useState("");
@@ -47,6 +48,11 @@ function App() {
 		{} as Record<string, number>,
 	);
 
+	const chartData = Object.entries(categoryData).map(([category, total]) => ({
+		category,
+		total,
+	}));
+
 	return (
 		<div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
 			<Navbar />
@@ -83,6 +89,7 @@ function App() {
 					))
 				)}
 			</div>
+			<CategoryChart data={chartData} />
 
 			{/* FORM SECTION */}
 			<div style={{ marginBottom: "25px" }}>
@@ -99,7 +106,6 @@ function App() {
 				/>
 			</div>
 
-			{/* LIST SECTION */}
 			{/* LIST SECTION */}
 			{filteredExpenses.length === 0 ? (
 				<p style={{ textAlign: "center", marginTop: "20px", color: "#666" }}>
