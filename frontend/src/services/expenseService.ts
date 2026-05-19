@@ -16,7 +16,7 @@ const authFetch = async (url: string, options?: RequestInit) => {
 		if (res.status === 401) {
 			localStorage.removeItem("token");
 			window.location.href = "/login";
-			return;
+			throw new Error("Unauthorized");
 		}
 
 		throw new Error(`HTTP error ${res.status}`);
