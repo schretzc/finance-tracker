@@ -6,6 +6,7 @@ import { useExpenses } from "./hooks/useExpenses";
 import Navbar from "./components/Navbar";
 import FilterBar from "./components/FilterBar";
 import CategoryChart from "./components/CategoryChart";
+import MonthlySpendingChart from "./components/MonthlySpendingChart";
 
 function App() {
 	const [startDate, setStartDate] = useState("");
@@ -66,6 +67,40 @@ function App() {
 		total,
 	}));
 
+	const monthlyDataMap = filteredExpenses.reduce(
+		(acc, exp) => {
+			const date = new Date(exp.date);
+
+			const key = `${date.getFullYear()}-${date.getMonth()}`;
+			// e.g. "2026-0", "2026-1"
+
+			acc[key] = (acc[key] || 0) + Number(exp.amount);
+
+			return acc;
+		},
+		{} as Record<string, number>,
+	);
+
+	const monthlyChartData = Object.entries(monthlyDataMap)
+		.sort(([a], [b]) => {
+			const [yearA, monthA] = a.split("-").map(Number);
+			const [yearB, monthB] = b.split("-").map(Number);
+
+			return yearA === yearB ? monthA - monthB : yearA - yearB;
+		})
+		.map(([key, total]) => {
+			const [year, month] = key.split("-").map(Number);
+			const date = new Date(year, month);
+
+			return {
+				month: date.toLocaleString("default", {
+					month: "short",
+					year: "numeric",
+				}),
+				total,
+			};
+		});
+
 	return (
 		<div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
 			<Navbar />
@@ -104,6 +139,8 @@ function App() {
 				)}
 			</div>
 			<CategoryChart data={chartData} />
+
+			<MonthlySpendingChart data={monthlyChartData} />
 
 			{/* FORM SECTION */}
 			<div style={{ marginBottom: "25px" }}>

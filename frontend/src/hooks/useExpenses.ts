@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
 	getExpenses,
 	createExpense,
@@ -15,27 +15,28 @@ export function useExpenses(startDate?: string, endDate?: string) {
 	>([]);
 	const [loading, setLoading] = useState(true);
 
+	const refreshData = useCallback(async () => {
+		setLoading(true);
+		try {
+			const [expenseData, summaryData] = await Promise.all([
+				getExpenses(startDate, endDate),
+				getCategorySummary(startDate, endDate),
+			]);
+			setExpenses(Array.isArray(expenseData) ? expenseData : []);
+			setCategorySummary(Array.isArray(summaryData) ? summaryData : []);
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setLoading(false);
+		}
+	}, [startDate, endDate]);
+
 	useEffect(() => {
 		const load = async () => {
-			setLoading(true);
-
-			try {
-				const [expenseData, summaryData] = await Promise.all([
-					getExpenses(startDate, endDate),
-					getCategorySummary(startDate, endDate),
-				]);
-
-				setExpenses(Array.isArray(expenseData) ? expenseData : []);
-				setCategorySummary(Array.isArray(summaryData) ? summaryData : []);
-			} catch (err) {
-				console.error(err);
-			} finally {
-				setLoading(false);
-			}
+			await refreshData();
 		};
-
 		load();
-	}, [startDate, endDate]);
+	}, [refreshData]);
 
 	const addExpense = async (data: {
 		name: string;
@@ -44,10 +45,12 @@ export function useExpenses(startDate?: string, endDate?: string) {
 		date: string;
 	}) => {
 		await createExpense(data);
+		await refreshData();
 	};
 
 	const deleteExpense = async (id: number) => {
 		await deleteExpenseService(id);
+		await refreshData();
 	};
 
 	const updateExpense = async (
@@ -55,6 +58,7 @@ export function useExpenses(startDate?: string, endDate?: string) {
 		data: { name: string; amount: number; category: string },
 	) => {
 		await updateExpenseService(id, data);
+		await refreshData();
 	};
 
 	return {
