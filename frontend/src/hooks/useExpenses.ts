@@ -14,26 +14,32 @@ export function useExpenses(startDate?: string, endDate?: string) {
 		{ category: string; total: number }[]
 	>([]);
 	const [loading, setLoading] = useState(true);
+	const [refreshing, setRefreshing] = useState(false);
 
-	const refreshData = useCallback(async () => {
-		setLoading(true);
-		try {
-			const [expenseData, summaryData] = await Promise.all([
-				getExpenses(startDate, endDate),
-				getCategorySummary(startDate, endDate),
-			]);
-			setExpenses(Array.isArray(expenseData) ? expenseData : []);
-			setCategorySummary(Array.isArray(summaryData) ? summaryData : []);
-		} catch (err) {
-			console.error(err);
-		} finally {
-			setLoading(false);
-		}
-	}, [startDate, endDate]);
+	const refreshData = useCallback(
+		async (isInitial = false) => {
+			if (isInitial) setLoading(true);
+			else setRefreshing(true); // silent background refresh
+			try {
+				const [expenseData, summaryData] = await Promise.all([
+					getExpenses(startDate, endDate),
+					getCategorySummary(startDate, endDate),
+				]);
+				setExpenses(Array.isArray(expenseData) ? expenseData : []);
+				setCategorySummary(Array.isArray(summaryData) ? summaryData : []);
+			} catch (err) {
+				console.error(err);
+			} finally {
+				if (isInitial) setLoading(false);
+				else setRefreshing(false);
+			}
+		},
+		[startDate, endDate],
+	);
 
 	useEffect(() => {
 		const load = async () => {
-			await refreshData();
+			await refreshData(true);
 		};
 		load();
 	}, [refreshData]);

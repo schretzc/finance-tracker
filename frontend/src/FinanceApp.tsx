@@ -7,7 +7,8 @@ import Navbar from "./components/Navbar";
 import FilterBar from "./components/FilterBar";
 import CategoryChart from "./components/CategoryChart";
 import MonthlySpendingChart from "./components/MonthlySpendingChart";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
 	const [startDate, setStartDate] = useState("");
 	const [endDate, setEndDate] = useState("");
@@ -169,6 +170,7 @@ function App() {
 					onUpdate={updateExpense}
 				/>
 			)}
+			<ToastContainer position="bottom-right" autoClose={2000} />
 		</div>
 	);
 }

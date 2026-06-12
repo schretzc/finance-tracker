@@ -7,6 +7,7 @@ import {
 	primaryButtonStyle,
 	inputStyle,
 } from "../constants/styles";
+import { toast } from "react-toastify";
 
 type Props = {
 	expense: Expense;
@@ -35,6 +36,7 @@ export default function ExpenseItem({ expense, onDelete, onUpdate }: Props) {
 			category: editCategory,
 		});
 
+		toast.success("Expense updated");
 		setIsEditing(false);
 	};
 
@@ -132,12 +134,13 @@ export default function ExpenseItem({ expense, onDelete, onUpdate }: Props) {
 						<span>{new Date(expense.date).toLocaleDateString()}</span>
 					</div>
 
-					{/* ACTIONS */}
+					{/* Actions */}
 					<div style={{ display: "flex", gap: "8px" }}>
 						<button
 							onClick={() => {
 								if (confirm("Delete this expense?")) {
 									onDelete(expense.id);
+									toast.success("Expense deleted");
 								}
 							}}
 							style={dangerButtonStyle}

@@ -1,6 +1,7 @@
 import { categories, type Category } from "../constants/categories";
 import { inputStyle, primaryButtonStyle } from "../constants/styles";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 type Props = {
 	name: string;
@@ -50,6 +51,8 @@ export default function ExpenseForm({
 								category,
 								date,
 							});
+
+							toast.success("Expense added");
 
 							setName("");
 							setAmount("");
