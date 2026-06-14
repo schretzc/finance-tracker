@@ -14,12 +14,10 @@ export function useExpenses(startDate?: string, endDate?: string) {
 		{ category: string; total: number }[]
 	>([]);
 	const [loading, setLoading] = useState(true);
-	const [refreshing, setRefreshing] = useState(false);
 
 	const refreshData = useCallback(
 		async (isInitial = false) => {
 			if (isInitial) setLoading(true);
-			else setRefreshing(true); // silent background refresh
 			try {
 				const [expenseData, summaryData] = await Promise.all([
 					getExpenses(startDate, endDate),
@@ -31,7 +29,6 @@ export function useExpenses(startDate?: string, endDate?: string) {
 				console.error(err);
 			} finally {
 				if (isInitial) setLoading(false);
-				else setRefreshing(false);
 			}
 		},
 		[startDate, endDate],
