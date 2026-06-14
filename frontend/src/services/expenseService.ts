@@ -1,5 +1,5 @@
 import { getToken } from "./authService";
-const BASE_URL = "http://localhost:3000/expenses";
+const BASE_URL = `${import.meta.env.VITE_API_URL}/expenses`;
 
 const authFetch = async (url: string, options?: RequestInit) => {
 	const token = getToken();
@@ -78,7 +78,5 @@ export const getCategorySummary = (startDate?: string, endDate?: string) => {
 	if (startDate) params.append("startDate", startDate);
 	if (endDate) params.append("endDate", endDate);
 
-	return authFetch(
-		`http://localhost:3000/expenses/summary/category?${params.toString()}`,
-	);
+	return authFetch(`${BASE_URL}/summary/category?${params.toString()}`);
 };
