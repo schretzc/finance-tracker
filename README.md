@@ -64,7 +64,7 @@ This project demonstrates clean architecture, separation of concerns, and real-w
 - `authFetch` wrapper centralizes token attachment, 401 redirects, and HTTP error handling across all service calls
 - Proper `try/catch/finally` error handling in hooks — loading state always resolves regardless of fetch outcome
 - Toast notifications for all user actions (add, update, delete)
-- Prisma v7 driver adapter pattern for production PostgreSQL on Railway
+- Prisma v7 with PostgreSQL driver adapter integration and Railway deployment
 
 ---
 
