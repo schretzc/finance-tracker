@@ -5,13 +5,14 @@ import { prisma } from "../prisma";
 
 const router = express.Router();
 
-// REGISTER
+// register
 router.post("/register", async (req, res) => {
 	try {
 		const { email, password } = req.body;
+		const normalizedEmail = email.toLowerCase();
 
 		const existingUser = await prisma.user.findUnique({
-			where: { email },
+			where: { email: normalizedEmail },
 		});
 
 		if (existingUser) {
@@ -22,7 +23,7 @@ router.post("/register", async (req, res) => {
 
 		const user = await prisma.user.create({
 			data: {
-				email,
+				email: normalizedEmail,
 				password: hashedPassword,
 			},
 		});
@@ -42,13 +43,14 @@ router.post("/register", async (req, res) => {
 	}
 });
 
-// LOGIN
+// login
 router.post("/login", async (req, res) => {
 	try {
 		const { email, password } = req.body;
+		const normalizedEmail = email.toLowerCase();
 
 		const user = await prisma.user.findUnique({
-			where: { email },
+			where: { email: normalizedEmail },
 		});
 
 		if (!user) {
