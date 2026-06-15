@@ -4,7 +4,7 @@ A full-stack expense tracking application built with a modern TypeScript stack, 
 
 This project demonstrates clean architecture, separation of concerns, and real-world patterns including JWT-based authentication, layered backend design, and service abstraction on both the frontend and backend.
 
-> 🚀 **Live demo:** _coming soon_
+> 🚀 **Live demo:** [finance-tracker-olive-zeta.vercel.app](https://finance-tracker-olive-zeta.vercel.app)
 
 ---
 
@@ -16,19 +16,21 @@ This project demonstrates clean architecture, separation of concerns, and real-w
 - Full CRUD operations for expenses
 - User-scoped data — each user only sees their own expenses
 - PostgreSQL database hosted on Railway
-- Prisma ORM for type-safe database access
+- Prisma ORM with pg driver adapter (Prisma v7)
 - Request validation using Zod
+- Email normalization (lowercased on register and login)
 - Layered architecture (controllers, services, routes, middleware)
 
 ### Frontend
 
 - React + TypeScript (Vite)
 - JWT auth flow — register, login, logout
-- Create, edit, and delete expenses
+- Create, edit, and delete expenses with toast notifications
 - Filter expenses by date range and category
 - Search expenses by name
 - Category spending summary calculated client-side from filtered expenses
-- Real-time UI updates
+- Recharts integration — category pie chart and monthly spending bar chart
+- Real-time UI updates with silent background refresh (no loading flash on mutations)
 - Controlled form inputs with validation
 - Per-item editing with local component state
 - Service layer abstraction for API calls
@@ -38,12 +40,13 @@ This project demonstrates clean architecture, separation of concerns, and real-w
 
 ## 🛠 Tech Stack
 
-**Frontend:** React, TypeScript, Vite  
+**Frontend:** React, TypeScript, Vite, Recharts, react-toastify  
 **Backend:** Node.js, Express, TypeScript  
 **Database:** PostgreSQL (Railway)  
-**ORM:** Prisma  
+**ORM:** Prisma v7 (pg driver adapter)  
 **Validation:** Zod  
-**Auth:** JSON Web Tokens (JWT), bcrypt
+**Auth:** JSON Web Tokens (JWT), bcrypt  
+**Deployment:** Vercel (frontend), Railway (backend + database)
 
 ---
 
@@ -55,10 +58,13 @@ This project demonstrates clean architecture, separation of concerns, and real-w
 - Service layer on both frontend and backend
 - Custom React hook for expense state management
 - `useCallback` for stable async dependencies in `useEffect`
+- Separate `loading` and refresh states — initial load shows a spinner, CRUD mutations refresh silently without unmounting the UI
 - Middleware-based auth — token verification runs before every protected controller
-- Category analytics derived client-side from filtered expense data using `reduce`
+- Category analytics and monthly spending derived client-side from filtered expense data using `reduce`
 - `authFetch` wrapper centralizes token attachment, 401 redirects, and HTTP error handling across all service calls
 - Proper `try/catch/finally` error handling in hooks — loading state always resolves regardless of fetch outcome
+- Toast notifications for all user actions (add, update, delete)
+- Prisma v7 driver adapter pattern for production PostgreSQL on Railway
 
 ---
 
@@ -74,14 +80,18 @@ request → auth middleware → controller → service → Prisma → database
 - **Controllers** → handle HTTP requests/responses
 - **Services** → business logic + database operations
 - **Middleware** → JWT verification for protected routes
-- **Prisma Client** → type-safe database layer
+- **Prisma Client** → type-safe database layer with pg driver adapter
 
 ### Frontend
 
-- **Components** → UI (Form, List, Item)
-- **Hooks** → data fetching and state management
-- **Services** → API calls and auth token management
-- **App** → orchestration and routing
+```
+component → hook → service → backend API
+```
+
+- **Components** → UI rendering only, receive data as props
+- **Hooks** → data fetching, state management, CRUD operations
+- **Services** → raw API calls, no state
+- **App** → orchestration, filtering, chart data derivation
 
 ---
 
@@ -116,6 +126,12 @@ Create a `.env` file inside `backend/`:
 DATABASE_URL="your_postgresql_connection_string"
 JWT_SECRET="your_jwt_secret"
 PORT=3000
+```
+
+Create a `.env` file inside `frontend/`:
+
+```env
+VITE_API_URL=http://localhost:3000
 ```
 
 ---
@@ -189,18 +205,7 @@ finance-tracker/
       services/
       types/
       constants/
-  shared/
 ```
-
----
-
-## 🔮 Future Improvements
-
-- Tailwind CSS migration
-- Charts and analytics dashboard
-- Toast notifications
-- Responsive mobile layout
-- Deployment (Vercel + Railway)
 
 ---
 
